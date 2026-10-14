@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work | JBG Digital</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="page-body">
+    <header>
+        <a href="index.html" class="logo"><img src="jameel.logo.transparent.png" alt="JBG Digital Logo"></a>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="services.html">Services</a>
+            <a href="work.html" class="active" aria-current="page">Work</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+        <a href="contact.html" class="header-btn">Get Started</a>
+    </header>
+
+    <main>
+        <section class="page-hero compact-hero">
+            <div class="page-hero-copy">
+                <small>Selected work</small>
+                <h1>Ideas made <span>visible.</span></h1>
+                <p>A small collection of digital directions for brands, creators, and businesses that want to move with intent.</p>
+                <a href="contact.html" class="btn btn-dark">Create a project</a>
+            </div>
+            <div class="page-hero-visual visual-work"><img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1100&q=80" alt="Digital analytics interface"></div>
+        </section>
+
+        <section class="page-section">
+            <div class="section-title"><small>Portfolio</small><h2>Creative projects with purpose.</h2><p>Each direction starts with a problem, then becomes a visual and digital system.</p></div>
+            <div class="work-grid work-page-grid">
+                <article class="work-card clickable-card" data-href="website-project.html" tabindex="0" role="link"><img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=900&q=80" alt="Modern website project"><div class="work-info"><span class="service-number">01 / Digital</span><h3>Website Project</h3><p>A clear, confident product experience.</p></div></article>
+                <article class="work-card clickable-card" data-href="creative-design-project.html" tabindex="0" role="link"><img src="https://images.unsplash.com/photo-1559028012-481c04fa702d?auto=format&fit=crop&w=900&q=80" alt="Creative branding project"><div class="work-info"><span class="service-number">02 / Identity</span><h3>Creative Design</h3><p>A visual identity with a flexible voice.</p></div></article>
+                <article class="work-card clickable-card" data-href="technology-concept.html" tabindex="0" role="link"><img src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=900&q=80" alt="Technology and AI concept"><div class="work-info"><span class="service-number">03 / Technology</span><h3>Technology Concept</h3><p>An intelligent idea made approachable.</p></div></article>
+            </div>
+        </section>
+
+        <section class="page-section upload-section">
+            <div class="section-title"><small>Visual library</small><h2>Bring your product into the room.</h2><p>Upload portfolio visuals, medicine products, packaging, or other reference images for a project.</p></div>
+            <div class="image-uploader" data-upload-key="jbg-work-images" data-upload-limit="8">
+                <div class="upload-controls"><label class="upload-dropzone"><input type="file" accept="image/*" multiple><span class="upload-icon">+</span><strong>Drop product or project images here</strong><small>PNG, JPG, WEBP up to 5 MB each</small></label><button type="button" class="upload-clear">Clear images</button></div>
+                <div class="upload-preview-grid" aria-live="polite"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer><p>&copy; 2026 JBG Digital. All Rights Reserved.</p></footer>
+    <script src="script.js"></script>
+    <script src="image-upload.js"></script>
+</body>
+</html>

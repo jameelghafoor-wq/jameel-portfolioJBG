@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | JBG Digital</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="page-body contact-page">
+    <header>
+        <a href="index.html" class="logo"><img src="jameel.logo.transparent.png" alt="JBG Digital Logo"></a>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="services.html">Services</a>
+            <a href="work.html">Work</a>
+            <a href="contact.html" class="active" aria-current="page">Contact</a>
+        </nav>
+        <a href="contact.html" class="header-btn">Get Started</a>
+    </header>
+
+    <main>
+        <section class="page-hero contact-hero">
+            <div class="page-hero-copy">
+                <small>Let's talk</small>
+                <h1>Bring an idea <span>to life.</span></h1>
+                <p>Tell us what you are building, changing, or imagining. We will help you find the clearest next move.</p>
+                <div class="contact-details page-contact-details"><div><strong>Email:</strong> hello@example.com</div><div><strong>Phone:</strong> +92 300 0000000</div><div><strong>Location:</strong> Pakistan</div></div>
+                <img class="contact-image" src="https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=1000&q=85" alt="Creative team discussing a new project">
+            </div>
+            <div class="contact-form page-contact-form">
+                <form id="contactForm">
+                    <label for="name">Your name</label><input id="name" type="text" placeholder="Your Name" required>
+                    <label for="email">Your email</label><input id="email" type="email" placeholder="Your Email" required>
+                    <label for="subject">Project subject</label><input id="subject" type="text" placeholder="Subject" required>
+                    <label for="message">Your message</label><textarea id="message" placeholder="Write your message..." required></textarea>
+                    <div class="inline-uploader image-uploader" data-upload-key="jbg-project-references" data-upload-limit="6">
+                        <label class="upload-dropzone"><input type="file" accept="image/*" multiple><span class="upload-icon">+</span><strong>Attach reference images</strong><small>Products, medicine packaging, profiles, or inspiration</small></label>
+                        <div class="upload-preview-grid" aria-live="polite"></div>
+                        <button type="button" class="upload-clear">Clear attachments</button>
+                    </div>
+                    <button type="submit">Send Message</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer><p>&copy; 2026 JBG Digital. All Rights Reserved.</p></footer>
+    <script src="script.js"></script>
+    <script src="image-upload.js"></script>
+</body>
+</html>

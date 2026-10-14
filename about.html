@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | JBG Digital</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="page-body">
+    <header>
+        <a href="index.html" class="logo"><img src="jameel.logo.transparent.png" alt="JBG Digital Logo"></a>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="about.html" class="active" aria-current="page">About</a>
+            <a href="services.html">Services</a>
+            <a href="work.html">Work</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+        <a href="contact.html" class="header-btn">Get Started</a>
+    </header>
+
+    <main>
+        <section class="page-hero">
+            <div class="page-hero-copy">
+                <small>About JBG Digital</small>
+                <h1>Ideas with <span>dimension.</span></h1>
+                <p>We turn ambitious ideas into clear, useful digital experiences with a balance of strategy, technology, and visual craft.</p>
+                <a href="services.html" class="btn btn-dark">Explore our capabilities</a>
+            </div>
+            <div class="page-hero-visual visual-about">
+                <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1100&q=80" alt="JBG Digital team collaborating">
+                <div class="floating-note">Strategy<br><strong>+</strong><br>Craft</div>
+            </div>
+        </section>
+
+        <section class="page-section">
+            <div class="section-title">
+                <small>Our point of view</small>
+                <h2>Digital work should feel human.</h2>
+                <p>We create polished systems that make brands easier to understand, use, and remember.</p>
+            </div>
+            <div class="about-story-grid">
+                <article class="glass-panel clickable-card" data-href="think-clearly.html" tabindex="0" role="link"><img class="principle-image" src="https://images.unsplash.com/photo-1456324504439-367cee3b3c32?auto=format&fit=crop&w=800&q=85" alt="Notebook and pencil for clear planning"><span class="service-number">01</span><h3>Think clearly</h3><p>We find the signal in a complex idea and shape it into a focused digital direction.</p></article>
+                <article class="glass-panel clickable-card" data-href="make-boldly.html" tabindex="0" role="link"><img class="principle-image" src="https://images.unsplash.com/photo-1549490349-8643362247b5?auto=format&fit=crop&w=800&q=85" alt="Colorful abstract artwork for bold ideas"><span class="service-number">02</span><h3>Make boldly</h3><p>We use expressive design, motion, and technology to give every interaction a point of view.</p></article>
+                <article class="glass-panel clickable-card" data-href="build-usefully.html" tabindex="0" role="link"><img class="principle-image" src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800&q=85" alt="Team collaborating around a useful plan"><span class="service-number">03</span><h3>Build usefully</h3><p>Every surface is designed to be responsive, accessible, and ready for real-world use.</p></article>
+            </div>
+        </section>
+
+        <section class="page-section upload-section">
+            <div class="section-title"><small>Profile studio</small><h2>Add your visual story.</h2><p>Upload a profile, team, or brand image to preview it inside your project workspace.</p></div>
+            <div class="image-uploader" data-upload-key="jbg-profile-images" data-upload-limit="4">
+                <div class="upload-controls"><label class="upload-dropzone"><input type="file" accept="image/*" multiple><span class="upload-icon">+</span><strong>Drop profile or team images here</strong><small>PNG, JPG, WEBP up to 5 MB each</small></label><button type="button" class="upload-clear">Clear images</button></div>
+                <div class="upload-preview-grid" aria-live="polite"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer><p>&copy; 2026 JBG Digital. All Rights Reserved.</p></footer>
+    <script src="script.js"></script>
+    <script src="image-upload.js"></script>
+</body>
+</html>

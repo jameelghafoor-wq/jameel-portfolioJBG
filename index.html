@@ -1,0 +1,2552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JBG Digital — Intelligent Automation Lab</title>
+<meta name="description" content="AI-powered automation systems, workflow engineering and futuristic digital experiences.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* =========================================================
+   0. TOKENS
+========================================================= */
+:root{
+  --ocean-1:#021b2b;
+  --ocean-2:#062b3f;
+  --ocean-3:#0a4157;
+  --ocean-4:#0e5a72;
+  --teal:#1fb6b0;
+  --aqua:#35d8c4;
+  --cyan:#9fe8f5;
+  --cyan-soft:#c9f4fb;
+  --gold:#f2c14e;
+  --gold-deep:#c9922a;
+  --sand:#f4e7cf;
+  --cream:#fbf6ea;
+  --forest:#0d3b2e;
+
+  --ink:#e8f7fa;
+  --ink-soft:rgba(232,247,250,.72);
+  --ink-faint:rgba(232,247,250,.48);
+
+  --glass:rgba(159,232,245,.065);
+  --glass-2:rgba(255,255,255,.045);
+  --glass-3:rgba(255,255,255,.09);
+  --stroke:rgba(159,232,245,.20);
+  --stroke-2:rgba(159,232,245,.34);
+  --shadow:0 30px 80px rgba(0,0,0,.5);
+  --shadow-soft:0 18px 44px rgba(0,0,0,.34);
+
+  --r-lg:28px;
+  --r-md:20px;
+  --r-sm:14px;
+
+  --ease:cubic-bezier(.22,.8,.24,1);
+}
+
+/* =========================================================
+   1. RESET
+========================================================= */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  min-width:320px;
+  overflow-x:hidden;
+  font-family:'Inter','Segoe UI',system-ui,sans-serif;
+  font-size:16px;
+  line-height:1.65;
+  color:var(--ink);
+  background:
+    radial-gradient(1200px 700px at 12% 4%, rgba(14,90,114,.85), transparent 60%),
+    radial-gradient(1000px 700px at 88% 96%, rgba(13,59,46,.9), transparent 62%),
+    radial-gradient(900px 600px at 78% 12%, rgba(31,182,176,.18), transparent 60%),
+    linear-gradient(165deg,var(--ocean-1) 0%, var(--ocean-2) 46%, var(--ocean-1) 100%);
+  background-attachment:fixed;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block}
+a{text-decoration:none;color:inherit}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+ul{list-style:none}
+h1,h2,h3,h4{font-family:'Sora','Trebuchet MS',sans-serif;font-weight:700;line-height:1.08;letter-spacing:-.03em}
+::selection{background:rgba(242,193,78,.32);color:#fff}
+
+/* scrollbar */
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:rgba(255,255,255,.03)}
+::-webkit-scrollbar-thumb{
+  background:linear-gradient(180deg,var(--teal),var(--ocean-4));
+  border-radius:99px;border:2px solid transparent;background-clip:padding-box;
+}
+
+/* =========================================================
+   2. BACKGROUND LAYERS
+========================================================= */
+#bgCanvas{
+  position:fixed;inset:0;width:100%;height:100%;
+  z-index:-3;pointer-events:none;opacity:.85;
+}
+.bg-aurora{
+  position:fixed;inset:-20%;z-index:-4;pointer-events:none;
+  background:
+    radial-gradient(600px 600px at 18% 26%, rgba(31,182,176,.16), transparent 62%),
+    radial-gradient(520px 520px at 76% 62%, rgba(242,193,78,.09), transparent 62%),
+    radial-gradient(700px 700px at 50% 100%, rgba(13,59,46,.4), transparent 65%);
+  animation:auroraDrift 26s ease-in-out infinite alternate;
+}
+.bg-scan{
+  position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.045;
+  background:repeating-linear-gradient(0deg, rgba(159,232,245,.7) 0 1px, transparent 1px 4px);
+  mix-blend-mode:overlay;
+}
+@keyframes auroraDrift{
+  0%{transform:translate3d(-2%,-1%,0) scale(1)}
+  100%{transform:translate3d(3%,2%,0) scale(1.08)}
+}
+
+/* =========================================================
+   3. STARTUP SCREEN
+========================================================= */
+.boot{
+  position:fixed;inset:0;z-index:9999;
+  display:grid;place-items:center;
+  background:
+    radial-gradient(circle at 50% 42%, #0d5570 0%, #062b3f 42%, #021b2b 78%);
+  transition:opacity .95s var(--ease), visibility .95s var(--ease);
+}
+.boot.is-done{opacity:0;visibility:hidden;pointer-events:none}
+.boot canvas{position:absolute;inset:0;width:100%;height:100%}
+.boot-inner{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;align-items:center;
+  padding:24px;text-align:center;
+}
+.boot-ring{
+  position:absolute;top:50%;left:50%;
+  width:300px;height:300px;margin:-150px 0 0 -150px;
+  border-radius:50%;border:1px solid rgba(159,232,245,.18);
+  animation:bootSpin 14s linear infinite;
+}
+.boot-ring::before{
+  content:"";position:absolute;top:-4px;left:50%;
+  width:8px;height:8px;margin-left:-4px;border-radius:50%;
+  background:var(--gold);box-shadow:0 0 20px 4px rgba(242,193,78,.7);
+}
+.boot-ring.two{
+  width:400px;height:400px;margin:-200px 0 0 -200px;
+  border-color:rgba(31,182,176,.14);
+  animation:bootSpin 22s linear infinite reverse;
+}
+.boot-ring.two::before{background:var(--aqua);box-shadow:0 0 20px 4px rgba(53,216,196,.65)}
+@keyframes bootSpin{to{transform:rotate(360deg)}}
+
+.boot-logo{
+  position:relative;
+  width:150px;height:150px;
+  display:grid;place-items:center;
+  border-radius:36px;
+  background:linear-gradient(150deg,rgba(255,255,255,.12),rgba(255,255,255,.02));
+  border:1px solid rgba(159,232,245,.28);
+  box-shadow:
+    0 30px 70px rgba(0,0,0,.5),
+    inset 0 1px 0 rgba(255,255,255,.4),
+    inset 0 -22px 40px rgba(2,27,43,.55),
+    0 0 90px rgba(31,182,176,.28);
+  backdrop-filter:blur(18px) saturate(150%);
+  -webkit-backdrop-filter:blur(18px) saturate(150%);
+  animation:bootLogoIn 1.2s var(--ease) both, bootFloat 5s ease-in-out 1.2s infinite;
+  transform-style:preserve-3d;
+}
+.boot-logo svg{width:96px;height:96px;filter:drop-shadow(0 6px 18px rgba(31,182,176,.5))}
+.boot-logo::after{
+  content:"";position:absolute;inset:0;border-radius:36px;
+  background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.35) 46%,transparent 62%);
+  transform:translateX(-120%);
+  animation:bootSheen 2.6s 0.8s var(--ease) infinite;
+}
+@keyframes bootSheen{0%{transform:translateX(-130%)}60%,100%{transform:translateX(130%)}}
+@keyframes bootLogoIn{
+  0%{opacity:0;transform:perspective(900px) rotateY(-32deg) rotateX(14deg) scale(.72)}
+  100%{opacity:1;transform:perspective(900px) rotateY(0) rotateX(0) scale(1)}
+}
+@keyframes bootFloat{0%,100%{translate:0 0}50%{translate:0 -12px}}
+
+.boot-brand{
+  margin-top:34px;
+  font-family:'Sora',sans-serif;
+  font-size:clamp(22px,4.6vw,34px);
+  font-weight:800;
+  letter-spacing:.36em;
+  text-transform:uppercase;
+  color:var(--cream);
+  text-shadow:0 4px 26px rgba(31,182,176,.5);
+  animation:bootFade 1s .55s var(--ease) both;
+}
+.boot-sub{
+  margin-top:10px;
+  font-size:11px;font-weight:600;letter-spacing:.44em;text-transform:uppercase;
+  color:rgba(159,232,245,.66);
+  animation:bootFade 1s .75s var(--ease) both;
+}
+.boot-bar{
+  width:min(320px,72vw);height:3px;margin-top:36px;
+  border-radius:99px;overflow:hidden;
+  background:rgba(159,232,245,.14);
+  animation:bootFade 1s .95s var(--ease) both;
+}
+.boot-bar i{
+  display:block;height:100%;width:0;border-radius:99px;
+  background:linear-gradient(90deg,var(--teal),var(--cyan),var(--gold));
+  box-shadow:0 0 18px rgba(53,216,196,.8);
+  animation:bootLoad 2.2s .5s var(--ease) forwards;
+}
+@keyframes bootLoad{0%{width:0}55%{width:68%}100%{width:100%}}
+.boot-status{
+  margin-top:16px;font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(232,247,250,.5);font-family:'Sora',sans-serif;
+  animation:bootFade 1s 1.1s var(--ease) both;
+}
+.boot-status b{color:var(--gold);font-weight:700}
+@keyframes bootFade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* =========================================================
+   4. HEADER
+========================================================= */
+.site-header{
+  position:fixed;top:0;left:0;right:0;z-index:900;
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  padding:16px clamp(18px,5vw,72px);
+  background:linear-gradient(180deg,rgba(2,27,43,.78),rgba(2,27,43,.28));
+  backdrop-filter:blur(20px) saturate(150%);
+  -webkit-backdrop-filter:blur(20px) saturate(150%);
+  border-bottom:1px solid rgba(159,232,245,.12);
+  transition:padding .35s var(--ease), background .35s var(--ease);
+}
+.site-header.shrink{padding-top:9px;padding-bottom:9px;background:rgba(2,27,43,.9)}
+.brand{display:flex;align-items:center;gap:12px}
+.brand svg{width:44px;height:44px;filter:drop-shadow(0 4px 14px rgba(31,182,176,.45))}
+.brand-txt{display:flex;flex-direction:column;line-height:1}
+.brand-txt b{
+  font-family:'Sora',sans-serif;font-size:15px;font-weight:800;
+  letter-spacing:.2em;color:var(--cream);
+}
+.brand-txt span{
+  font-size:8.5px;letter-spacing:.34em;text-transform:uppercase;
+  color:rgba(159,232,245,.6);margin-top:5px;
+}
+.nav{display:flex;align-items:center;gap:6px;
+  padding:7px 10px;border-radius:99px;
+  border:1px solid rgba(159,232,245,.16);
+  background:rgba(255,255,255,.04);
+  backdrop-filter:blur(12px);
+}
+.nav a{
+  position:relative;padding:8px 15px;border-radius:99px;
+  font-size:12.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink-soft);transition:color .3s var(--ease), background .3s var(--ease);
+}
+.nav a:hover{color:var(--cream);background:rgba(159,232,245,.09)}
+.nav a.active{color:var(--ocean-1);background:linear-gradient(135deg,var(--cyan),var(--aqua))}
+.cta-btn{
+  position:relative;overflow:hidden;
+  padding:12px 24px;border-radius:99px;
+  font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:#04191f;
+  background:linear-gradient(135deg,var(--gold),#ffd97a 50%,var(--gold-deep));
+  box-shadow:0 12px 30px rgba(242,193,78,.28), inset 0 1px 0 rgba(255,255,255,.6);
+  transition:transform .3s var(--ease), box-shadow .3s var(--ease);
+  white-space:nowrap;
+}
+.cta-btn:hover{transform:translateY(-3px);box-shadow:0 18px 38px rgba(242,193,78,.4), inset 0 1px 0 rgba(255,255,255,.7)}
+.cta-btn::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.65) 50%,transparent 65%);
+  transform:translateX(-130%);
+}
+.cta-btn:hover::after{animation:sheen .8s var(--ease)}
+@keyframes sheen{to{transform:translateX(130%)}}
+
+/* =========================================================
+   5. LAYOUT PRIMITIVES
+========================================================= */
+.section{
+  position:relative;
+  padding:clamp(80px,10vw,140px) clamp(18px,5vw,72px);
+}
+.section-head{max-width:800px;margin:0 auto clamp(44px,6vw,72px);text-align:center}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:7px 16px;border-radius:99px;
+  border:1px solid rgba(159,232,245,.24);
+  background:rgba(159,232,245,.07);
+  font-size:10.5px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--cyan);
+}
+.eyebrow::before{
+  content:"";width:6px;height:6px;border-radius:50%;
+  background:var(--gold);box-shadow:0 0 12px 2px rgba(242,193,78,.7);
+  animation:pulseDot 2.2s ease-in-out infinite;
+}
+@keyframes pulseDot{50%{opacity:.35;transform:scale(.7)}}
+.section-head h2{
+  margin:22px 0 16px;
+  font-size:clamp(30px,4.6vw,54px);
+  color:var(--cream);
+  text-shadow:0 12px 40px rgba(0,0,0,.4);
+}
+.section-head h2 em{
+  font-style:normal;
+  background:linear-gradient(120deg,var(--aqua),var(--cyan) 45%,var(--gold));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.section-head p{color:var(--ink-soft);font-size:clamp(14.5px,1.6vw,17px);max-width:640px;margin:0 auto}
+
+/* glass base */
+.glass{
+  position:relative;
+  border:1px solid var(--stroke);
+  border-radius:var(--r-lg);
+  background:linear-gradient(150deg,rgba(255,255,255,.085),rgba(255,255,255,.018));
+  box-shadow:var(--shadow-soft), inset 0 1px 0 rgba(255,255,255,.22), inset 0 -30px 60px rgba(2,27,43,.35);
+  backdrop-filter:blur(20px) saturate(150%);
+  -webkit-backdrop-filter:blur(20px) saturate(150%);
+}
+.glass::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(115deg,rgba(255,255,255,.16),transparent 32%,transparent 68%,rgba(159,232,245,.08));
+  opacity:.7;
+}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .9s var(--ease), transform .9s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+
+/* =========================================================
+   6. HERO
+========================================================= */
+.hero{
+  position:relative;
+  display:grid;
+  grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);
+  align-items:center;
+  gap:clamp(30px,5vw,70px);
+  min-height:100svh;
+  padding:150px clamp(18px,5vw,72px) 90px;
+  perspective:1600px;
+}
+.hero-copy{position:relative;z-index:3;animation:heroIn 1s .2s var(--ease) both}
+@keyframes heroIn{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:none}}
+.hero h1{
+  margin:24px 0 22px;
+  font-size:clamp(36px,6.2vw,76px);
+  color:var(--cream);
+  text-shadow:0 20px 60px rgba(0,0,0,.45);
+}
+.hero h1 em{
+  display:block;font-style:normal;
+  background:linear-gradient(115deg,var(--aqua) 0%,var(--cyan) 40%,var(--gold) 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 8px 30px rgba(53,216,196,.28));
+}
+.hero p{
+  max-width:590px;font-size:clamp(14.5px,1.7vw,18px);
+  color:var(--ink-soft);margin-bottom:36px;
+}
+.hero-actions{display:flex;flex-wrap:wrap;gap:16px}
+.btn{
+  position:relative;overflow:hidden;
+  display:inline-flex;align-items:center;gap:11px;
+  padding:16px 30px;border-radius:99px;
+  font-size:13px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+  transition:transform .35s var(--ease), box-shadow .35s var(--ease), background .35s var(--ease);
+}
+.btn-primary{
+  color:#04191f;
+  background:linear-gradient(135deg,var(--aqua),var(--teal) 55%,#118d8a);
+  box-shadow:0 16px 40px rgba(31,182,176,.36), inset 0 1px 0 rgba(255,255,255,.55);
+}
+.btn-primary:hover{transform:translateY(-4px);box-shadow:0 24px 55px rgba(31,182,176,.5), inset 0 1px 0 rgba(255,255,255,.7)}
+.btn-ghost{
+  color:var(--cream);
+  border:1px solid rgba(159,232,245,.3);
+  background:rgba(159,232,245,.06);
+  backdrop-filter:blur(14px);
+}
+.btn-ghost:hover{transform:translateY(-4px);background:rgba(159,232,245,.14);border-color:var(--stroke-2)}
+
+.hero-stats{
+  display:flex;flex-wrap:wrap;gap:clamp(18px,3vw,44px);
+  margin-top:52px;padding-top:30px;
+  border-top:1px solid rgba(159,232,245,.13);
+}
+.hero-stats div b{
+  display:block;font-family:'Sora',sans-serif;
+  font-size:clamp(22px,3vw,32px);font-weight:800;color:var(--cyan);
+}
+.hero-stats div span{
+  font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint);
+}
+
+/* hero visual — 3D automation core */
+.hero-visual{
+  position:relative;z-index:2;
+  display:grid;place-items:center;
+  min-height:480px;
+  transform-style:preserve-3d;
+  animation:heroVisualIn 1.2s .35s var(--ease) both;
+}
+@keyframes heroVisualIn{
+  from{opacity:0;transform:translateY(40px) rotateY(-18deg) rotateX(8deg)}
+  to{opacity:1;transform:none}
+}
+.core{
+  position:relative;width:min(430px,80vw);aspect-ratio:1;
+  transform-style:preserve-3d;
+  animation:coreFloat 8s ease-in-out infinite;
+}
+@keyframes coreFloat{0%,100%{translate:0 0}50%{translate:0 -16px}}
+
+.core-orb{
+  position:absolute;top:50%;left:50%;
+  width:132px;height:132px;margin:-66px 0 0 -66px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 34% 30%, rgba(255,255,255,.85), transparent 34%),
+    linear-gradient(150deg,var(--aqua),var(--teal) 45%,var(--forest));
+  box-shadow:
+    0 0 70px rgba(53,216,196,.55),
+    0 30px 60px rgba(0,0,0,.45),
+    inset 0 -18px 30px rgba(2,27,43,.55),
+    inset 0 6px 14px rgba(255,255,255,.4);
+  display:grid;place-items:center;
+  transform:translateZ(60px);
+  animation:orbPulse 4.5s ease-in-out infinite;
+}
+@keyframes orbPulse{50%{box-shadow:0 0 110px rgba(53,216,196,.8),0 30px 60px rgba(0,0,0,.45),inset 0 -18px 30px rgba(2,27,43,.55),inset 0 6px 14px rgba(255,255,255,.4)}}
+.core-orb span{
+  font-family:'Sora',sans-serif;font-size:12px;font-weight:800;
+  letter-spacing:.24em;color:#02181e;
+}
+.core-ring{
+  position:absolute;top:50%;left:50%;
+  border-radius:50%;border:1px solid rgba(159,232,245,.3);
+  transform-style:preserve-3d;
+}
+.core-ring.r1{width:250px;height:250px;margin:-125px 0 0 -125px;transform:rotateX(74deg) rotateZ(0deg);animation:ringSpin 12s linear infinite}
+.core-ring.r2{width:330px;height:330px;margin:-165px 0 0 -165px;border-color:rgba(242,193,78,.26);transform:rotateX(66deg) rotateY(22deg);animation:ringSpin 18s linear infinite reverse}
+.core-ring.r3{width:400px;height:400px;margin:-200px 0 0 -200px;border-color:rgba(31,182,176,.18);transform:rotateX(80deg) rotateZ(38deg);animation:ringSpin 24s linear infinite}
+@keyframes ringSpin{to{rotate:360deg}}
+
+.core-node{
+  position:absolute;top:50%;left:50%;
+  width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;
+  background:var(--gold);
+  box-shadow:0 0 22px 5px rgba(242,193,78,.7);
+}
+.core-node.n1{animation:nodeOrbit1 9s linear infinite}
+.core-node.n2{background:var(--cyan);box-shadow:0 0 22px 5px rgba(159,232,245,.7);animation:nodeOrbit2 13s linear infinite}
+.core-node.n3{background:var(--aqua);box-shadow:0 0 22px 5px rgba(53,216,196,.7);animation:nodeOrbit1 16s linear infinite reverse}
+@keyframes nodeOrbit1{
+  from{transform:rotate(0deg) translateX(160px) rotate(0deg) translateZ(30px)}
+  to{transform:rotate(360deg) translateX(160px) rotate(-360deg) translateZ(30px)}
+}
+@keyframes nodeOrbit2{
+  from{transform:rotate(0deg) translateX(205px) rotate(0deg) translateZ(-40px)}
+  to{transform:rotate(-360deg) translateX(205px) rotate(360deg) translateZ(-40px)}
+}
+
+.core-chip{
+  position:absolute;
+  padding:9px 15px;border-radius:12px;
+  border:1px solid rgba(159,232,245,.28);
+  background:rgba(6,43,63,.55);
+  backdrop-filter:blur(14px);
+  font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--cyan-soft);
+  box-shadow:0 16px 34px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.2);
+  white-space:nowrap;
+}
+.core-chip.c1{top:6%;left:-4%;animation:chipFloat 6s ease-in-out infinite}
+.core-chip.c2{top:44%;right:-10%;color:var(--gold);border-color:rgba(242,193,78,.32);animation:chipFloat 7s ease-in-out -2s infinite}
+.core-chip.c3{bottom:4%;left:8%;animation:chipFloat 8s ease-in-out -4s infinite}
+@keyframes chipFloat{0%,100%{translate:0 0}50%{translate:0 -14px}}
+
+.scroll-hint{
+  position:absolute;left:50%;bottom:26px;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--ink-faint);
+}
+.scroll-hint i{
+  width:1px;height:44px;
+  background:linear-gradient(180deg,var(--cyan),transparent);
+  animation:scrollPulse 2.2s ease-in-out infinite;
+}
+@keyframes scrollPulse{0%,100%{opacity:.3;transform:scaleY(.6)}50%{opacity:1;transform:scaleY(1)}}
+
+/* =========================================================
+   7. ABOUT
+========================================================= */
+.about-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));
+  gap:clamp(18px,2.4vw,30px);
+}
+.about-card{
+  position:relative;
+  padding:34px 30px 32px;
+  transition:transform .5s var(--ease), box-shadow .5s var(--ease), border-color .5s var(--ease);
+}
+.about-card:nth-child(1){transform:translateZ(0)}
+.about-card:hover{
+  transform:translateY(-12px) rotateX(3deg) rotateY(-3deg);
+  border-color:var(--stroke-2);
+  box-shadow:0 40px 80px rgba(0,0,0,.5), 0 0 60px rgba(31,182,176,.18), inset 0 1px 0 rgba(255,255,255,.28);
+}
+.about-icon{
+  display:grid;place-items:center;
+  width:56px;height:56px;border-radius:18px;
+  font-size:24px;
+  background:linear-gradient(150deg,rgba(53,216,196,.28),rgba(159,232,245,.08));
+  border:1px solid rgba(159,232,245,.28);
+  box-shadow:0 14px 30px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.3);
+  color:var(--cyan);
+}
+.about-card h3{margin:22px 0 12px;font-size:20px;color:var(--cream)}
+.about-card p{color:var(--ink-soft);font-size:14.5px}
+
+/* =========================================================
+   8. SERVICES
+========================================================= */
+.services-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:clamp(16px,2vw,24px);
+}
+.svc{
+  position:relative;overflow:hidden;
+  padding:30px 26px 28px;
+  border-radius:var(--r-md);
+  transition:transform .5s var(--ease), border-color .5s var(--ease), box-shadow .5s var(--ease);
+}
+.svc::after{
+  content:"";position:absolute;left:0;right:0;top:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--aqua),transparent);
+  opacity:0;transition:opacity .5s var(--ease);
+}
+.svc:hover{
+  transform:translateY(-10px) rotateX(4deg);
+  border-color:var(--stroke-2);
+  box-shadow:0 40px 70px rgba(0,0,0,.5), 0 0 50px rgba(31,182,176,.16), inset 0 1px 0 rgba(255,255,255,.26);
+}
+.svc:hover::after{opacity:1}
+.svc-glyph{
+  display:grid;place-items:center;
+  width:48px;height:48px;border-radius:14px;
+  font-size:20px;color:var(--gold);
+  background:linear-gradient(150deg,rgba(242,193,78,.2),rgba(242,193,78,.04));
+  border:1px solid rgba(242,193,78,.28);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.25);
+  transition:transform .5s var(--ease);
+}
+.svc:hover .svc-glyph{transform:translateZ(30px) rotate(-8deg) scale(1.08)}
+.svc h3{margin:20px 0 10px;font-size:17.5px;color:var(--cream)}
+.svc p{font-size:13.6px;color:var(--ink-soft)}
+.svc-num{
+  position:absolute;top:22px;right:24px;
+  font-family:'Sora',sans-serif;font-size:11px;font-weight:700;
+  letter-spacing:.16em;color:rgba(159,232,245,.32);
+}
+
+/* =========================================================
+   9. SKILLS / TECH
+========================================================= */
+.tech-cloud{
+  display:flex;flex-wrap:wrap;justify-content:center;
+  gap:12px;max-width:920px;margin:0 auto;
+}
+.tech-pill{
+  padding:11px 20px;border-radius:99px;
+  border:1px solid rgba(159,232,245,.2);
+  background:linear-gradient(150deg,rgba(255,255,255,.08),rgba(255,255,255,.02));
+  backdrop-filter:blur(12px);
+  font-size:12.5px;font-weight:600;letter-spacing:.05em;
+  color:var(--cyan-soft);
+  box-shadow:0 10px 24px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.2);
+  transition:transform .4s var(--ease), border-color .4s var(--ease), color .4s var(--ease);
+  animation:pillFloat 6s ease-in-out infinite;
+}
+.tech-pill:nth-child(3n){animation-delay:-2s}
+.tech-pill:nth-child(3n+1){animation-delay:-4s}
+.tech-pill:hover{
+  transform:translateY(-6px) scale(1.06);
+  border-color:var(--gold);
+  color:var(--gold);
+  box-shadow:0 18px 34px rgba(0,0,0,.36), 0 0 26px rgba(242,193,78,.28), inset 0 1px 0 rgba(255,255,255,.3);
+}
+@keyframes pillFloat{0%,100%{translate:0 0}50%{translate:0 -6px}}
+
+/* =========================================================
+   10. 3D PROJECT FLOOR
+========================================================= */
+.projects{overflow:hidden}
+.floor-wrap{position:relative}
+.floor{
+  position:relative;
+  height:clamp(430px,58vw,640px);
+  perspective:1700px;
+  perspective-origin:50% 38%;
+  transform-style:preserve-3d;
+}
+.floor-glow{
+  position:absolute;left:50%;bottom:4%;
+  width:min(1100px,120%);height:340px;
+  transform:translateX(-50%);
+  background:radial-gradient(ellipse at 50% 60%, rgba(31,182,176,.34), transparent 68%);
+  filter:blur(30px);pointer-events:none;
+}
+.floor-grid{
+  position:absolute;left:50%;bottom:0;
+  width:220%;height:560px;
+  transform:translateX(-50%) perspective(620px) rotateX(74deg);
+  transform-origin:50% 100%;
+  background-image:
+    linear-gradient(rgba(159,232,245,.16) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(159,232,245,.16) 1px, transparent 1px);
+  background-size:74px 74px;
+  -webkit-mask-image:radial-gradient(ellipse at 50% 100%, #000 6%, transparent 66%);
+  mask-image:radial-gradient(ellipse at 50% 100%, #000 6%, transparent 66%);
+  pointer-events:none;opacity:.75;
+}
+.ring{
+  position:absolute;inset:0;
+  transform-style:preserve-3d;
+}
+.pcard{
+  position:absolute;top:50%;left:50%;
+  width:var(--cw,300px);
+  margin-left:calc(var(--cw,300px) / -2);
+  margin-top:-205px;
+  transform-style:preserve-3d;
+  will-change:transform, opacity;
+  cursor:pointer;
+}
+.pcard-glass{
+  position:relative;
+  height:410px;
+  display:flex;flex-direction:column;
+  padding:16px 16px 18px;
+  border-radius:22px;
+  border:1px solid rgba(159,232,245,.24);
+  background:linear-gradient(155deg,rgba(14,90,114,.55),rgba(2,27,43,.62));
+  box-shadow:
+    0 34px 70px rgba(0,0,0,.55),
+    0 0 0 1px rgba(255,255,255,.04) inset,
+    inset 0 1px 0 rgba(255,255,255,.24),
+    inset 0 -40px 70px rgba(2,27,43,.5);
+  backdrop-filter:blur(18px) saturate(150%);
+  -webkit-backdrop-filter:blur(18px) saturate(150%);
+  overflow:hidden;
+  transition:box-shadow .5s var(--ease), border-color .5s var(--ease);
+}
+.pcard-glass::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(115deg,rgba(255,255,255,.2),transparent 34%,transparent 66%,rgba(53,216,196,.12));
+  opacity:.75;
+}
+.pcard:hover .pcard-glass,
+.pcard:focus-visible .pcard-glass{
+  border-color:rgba(159,232,245,.6);
+  box-shadow:
+    0 50px 100px rgba(0,0,0,.6),
+    0 0 70px rgba(53,216,196,.34),
+    inset 0 1px 0 rgba(255,255,255,.4),
+    inset 0 -40px 70px rgba(2,27,43,.45);
+}
+.pcard:focus-visible{outline:2px solid var(--gold);outline-offset:8px;border-radius:22px}
+
+.pcard-top{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin-bottom:12px;
+}
+.pcard-brand{display:flex;align-items:center;gap:8px}
+.pcard-brand svg{width:26px;height:26px}
+.pcard-brand b{
+  font-family:'Sora',sans-serif;font-size:9px;font-weight:800;
+  letter-spacing:.2em;color:rgba(232,247,250,.72);
+}
+.pcard-cat{
+  font-size:8.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--gold);
+  padding:5px 10px;border-radius:99px;
+  border:1px solid rgba(242,193,78,.3);
+  background:rgba(242,193,78,.08);
+  white-space:nowrap;
+}
+.pcard-media{
+  position:relative;
+  height:145px;border-radius:14px;overflow:hidden;
+  border:1px solid rgba(159,232,245,.18);
+  background:linear-gradient(150deg,var(--ocean-3),var(--ocean-1));
+  flex:0 0 auto;
+}
+.pcard-media img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease);filter:saturate(.85) contrast(1.02)}
+.pcard:hover .pcard-media img{transform:scale(1.09)}
+.pcard-media::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(2,27,43,.06),rgba(2,27,43,.7));
+}
+.pcard-shine{
+  position:absolute;inset:0;
+  background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.42) 50%,transparent 62%);
+  transform:translateX(-130%);
+  opacity:0;transition:opacity .4s;
+}
+.pcard:hover .pcard-shine{opacity:1;animation:sheen 1s var(--ease)}
+.pcard h3{
+  margin:14px 0 7px;
+  font-size:15.5px;line-height:1.24;color:var(--cream);
+}
+.pcard p{
+  font-size:11.8px;line-height:1.5;color:var(--ink-soft);
+  flex:1 1 auto;overflow:hidden;
+}
+.pcard-langs{display:flex;flex-wrap:wrap;gap:5px;margin:12px 0 12px}
+.lang{
+  padding:4px 9px;border-radius:99px;
+  font-size:8.6px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  border:1px solid rgba(159,232,245,.24);
+  background:rgba(159,232,245,.08);
+  color:var(--cyan);
+}
+.pcard-foot{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-top:12px;
+  border-top:1px solid rgba(159,232,245,.14);
+}
+.pcard-open{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--gold);
+  opacity:.55;transform:translateX(-4px);
+  transition:opacity .4s var(--ease), transform .4s var(--ease);
+}
+.pcard-open::after{content:"→";transition:transform .4s var(--ease)}
+.pcard:hover .pcard-open{opacity:1;transform:translateX(0)}
+.pcard:hover .pcard-open::after{transform:translateX(4px)}
+.pcard-num{
+  font-family:'Sora',sans-serif;font-size:11px;font-weight:800;
+  letter-spacing:.1em;color:rgba(159,232,245,.35);
+}
+
+.floor-controls{
+  display:flex;align-items:center;justify-content:center;gap:16px;
+  margin-top:clamp(20px,3vw,36px);
+}
+.floor-btn{
+  display:grid;place-items:center;
+  width:52px;height:52px;border-radius:50%;
+  border:1px solid rgba(159,232,245,.26);
+  background:linear-gradient(150deg,rgba(255,255,255,.1),rgba(255,255,255,.02));
+  backdrop-filter:blur(14px);
+  color:var(--cyan);font-size:20px;line-height:1;
+  box-shadow:0 14px 30px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.24);
+  transition:transform .35s var(--ease), color .35s var(--ease), border-color .35s var(--ease);
+}
+.floor-btn:hover{
+  transform:translateY(-4px) scale(1.06);
+  color:var(--gold);border-color:rgba(242,193,78,.5);
+}
+.floor-hint{
+  font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink-faint);text-align:center;
+}
+
+/* =========================================================
+   11. CONTACT
+========================================================= */
+.contact-grid{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:clamp(24px,4vw,56px);
+  align-items:start;
+}
+.contact-copy h2{font-size:clamp(26px,3.6vw,42px);color:var(--cream);margin-bottom:18px}
+.contact-copy p{color:var(--ink-soft);margin-bottom:30px;max-width:480px}
+.contact-list{display:grid;gap:12px}
+.contact-list div{
+  display:flex;align-items:center;gap:13px;
+  padding:15px 18px;border-radius:var(--r-sm);
+  border:1px solid rgba(159,232,245,.16);
+  background:rgba(159,232,245,.05);
+  font-size:13.6px;color:var(--ink-soft);
+}
+.contact-list b{
+  display:grid;place-items:center;
+  width:32px;height:32px;border-radius:10px;
+  background:linear-gradient(150deg,rgba(53,216,196,.28),rgba(53,216,196,.06));
+  border:1px solid rgba(159,232,245,.24);
+  color:var(--cyan);font-size:14px;
+  flex:0 0 auto;
+}
+.contact-form{padding:clamp(22px,3vw,34px)}
+.field{margin-bottom:16px}
+.field label{
+  display:block;margin-bottom:7px;
+  font-size:10.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink-faint);
+}
+.field input,.field textarea{
+  width:100%;
+  padding:14px 17px;
+  border-radius:var(--r-sm);
+  border:1px solid rgba(159,232,245,.2);
+  background:rgba(2,27,43,.42);
+  color:var(--cream);
+  font-family:inherit;font-size:14px;
+  outline:none;
+  transition:border-color .3s var(--ease), box-shadow .3s var(--ease), background .3s var(--ease);
+}
+.field textarea{min-height:130px;resize:vertical}
+.field input::placeholder,.field textarea::placeholder{color:rgba(232,247,250,.3)}
+.field input:focus,.field textarea:focus{
+  border-color:var(--aqua);
+  background:rgba(2,27,43,.62);
+  box-shadow:0 0 0 4px rgba(53,216,196,.16);
+}
+.form-status{
+  margin-top:14px;font-size:13px;color:var(--aqua);
+  min-height:20px;
+}
+
+/* =========================================================
+   12. FOOTER
+========================================================= */
+.site-footer{
+  padding:46px clamp(18px,5vw,72px) 40px;
+  border-top:1px solid rgba(159,232,245,.12);
+  background:rgba(2,18,28,.55);
+  backdrop-filter:blur(14px);
+}
+.footer-inner{
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;
+  gap:22px;max-width:1400px;margin:0 auto;
+}
+.footer-brand{display:flex;align-items:center;gap:12px}
+.footer-brand svg{width:38px;height:38px}
+.footer-brand b{
+  font-family:'Sora',sans-serif;font-size:13px;font-weight:800;
+  letter-spacing:.2em;color:var(--cream);
+}
+.footer-links{display:flex;flex-wrap:wrap;gap:20px}
+.footer-links a{font-size:12.5px;color:var(--ink-faint);transition:color .3s}
+.footer-links a:hover{color:var(--gold)}
+.footer-note{font-size:11.5px;color:rgba(232,247,250,.32);width:100%;text-align:center;margin-top:10px}
+
+/* =========================================================
+   13. PROJECT DETAIL OVERLAY
+========================================================= */
+.detail{
+  position:fixed;inset:0;z-index:1200;
+  display:flex;align-items:center;justify-content:center;
+  padding:clamp(10px,2.4vw,32px);
+  background:rgba(1,12,20,.78);
+  backdrop-filter:blur(16px) saturate(140%);
+  -webkit-backdrop-filter:blur(16px) saturate(140%);
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .5s var(--ease), visibility .5s var(--ease);
+  perspective:1800px;
+}
+.detail.open{opacity:1;visibility:visible;pointer-events:auto}
+.detail-shell{
+  position:relative;
+  width:min(1280px,100%);
+  max-height:100%;
+  display:flex;flex-direction:column;
+  border-radius:clamp(20px,2.4vw,30px);
+  border:1px solid rgba(159,232,245,.26);
+  background:linear-gradient(160deg,rgba(9,54,74,.86),rgba(2,27,43,.92));
+  box-shadow:0 60px 140px rgba(0,0,0,.7), 0 0 100px rgba(31,182,176,.16), inset 0 1px 0 rgba(255,255,255,.2);
+  overflow:hidden;
+  transform:translateY(40px) rotateX(7deg) scale(.96);
+  opacity:0;
+  transition:transform .6s var(--ease), opacity .5s var(--ease);
+}
+.detail.open .detail-shell{transform:none;opacity:1}
+
+.detail-head{
+  position:relative;
+  display:flex;align-items:flex-start;gap:18px;
+  padding:clamp(20px,2.6vw,32px) clamp(20px,2.6vw,36px);
+  border-bottom:1px solid rgba(159,232,245,.14);
+  background:linear-gradient(180deg,rgba(159,232,245,.06),transparent);
+  flex:0 0 auto;
+}
+.detail-head .brand svg{width:52px;height:52px}
+.detail-head-main{flex:1 1 auto;min-width:0}
+.detail-cat{
+  display:inline-block;
+  padding:5px 12px;border-radius:99px;
+  font-size:9.5px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);
+  border:1px solid rgba(242,193,78,.32);
+  background:rgba(242,193,78,.08);
+  margin-bottom:12px;
+}
+.detail-head h2{
+  font-size:clamp(20px,3vw,34px);color:var(--cream);
+  line-height:1.12;
+}
+.detail-close{
+  flex:0 0 auto;
+  display:grid;place-items:center;
+  width:46px;height:46px;border-radius:50%;
+  border:1px solid rgba(159,232,245,.28);
+  background:rgba(159,232,245,.07);
+  color:var(--cyan);font-size:20px;line-height:1;
+  transition:transform .35s var(--ease), background .35s var(--ease), color .35s var(--ease);
+}
+.detail-close:hover{transform:rotate(90deg) scale(1.08);background:rgba(242,193,78,.16);color:var(--gold)}
+
+.detail-body{
+  padding:clamp(20px,2.6vw,36px);
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  flex:1 1 auto;
+}
+.detail-cols{
+  display:grid;
+  grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);
+  gap:clamp(22px,3vw,44px);
+  margin-bottom:clamp(26px,3.4vw,44px);
+}
+.detail-cols h3{
+  font-size:12px;font-weight:800;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:16px;
+}
+.detail-cols p{color:var(--ink-soft);font-size:14.5px;margin-bottom:16px}
+.badge-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+.badge{
+  padding:7px 14px;border-radius:99px;
+  font-size:11px;font-weight:700;letter-spacing:.07em;
+  border:1px solid rgba(159,232,245,.24);
+  background:rgba(159,232,245,.08);
+  color:var(--cyan-soft);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14);
+  transition:transform .3s var(--ease), border-color .3s var(--ease), color .3s var(--ease);
+}
+.badge:hover{transform:translateY(-3px);border-color:var(--aqua);color:var(--aqua)}
+.badge-lang{
+  color:#04191f;
+  background:linear-gradient(135deg,var(--aqua),var(--teal));
+  border-color:transparent;
+}
+.badge-lang:hover{color:#04191f;border-color:transparent}
+.badge-soft{
+  border-style:dashed;color:var(--ink-soft);
+}
+
+.flow-list{display:grid;gap:10px;margin-bottom:26px}
+.flow-list li{
+  display:flex;align-items:flex-start;gap:14px;
+  padding:13px 16px;
+  border-radius:14px;
+  border:1px solid rgba(159,232,245,.14);
+  background:rgba(159,232,245,.05);
+  font-size:13.4px;color:var(--ink-soft);
+  transition:transform .35s var(--ease), border-color .35s var(--ease);
+}
+.flow-list li:hover{transform:translateX(6px);border-color:rgba(53,216,196,.45)}
+.flow-list b{
+  flex:0 0 auto;
+  display:grid;place-items:center;
+  width:26px;height:26px;border-radius:9px;
+  font-family:'Sora',sans-serif;font-size:10px;font-weight:800;
+  color:#04191f;
+  background:linear-gradient(135deg,var(--gold),var(--gold-deep));
+}
+.feature-list{display:grid;gap:9px;margin-bottom:26px}
+.feature-list li{
+  position:relative;padding-left:22px;
+  font-size:13.4px;color:var(--ink-soft);
+}
+.feature-list li::before{
+  content:"";position:absolute;left:2px;top:9px;
+  width:7px;height:7px;border-radius:50%;
+  background:var(--aqua);box-shadow:0 0 10px 2px rgba(53,216,196,.5);
+}
+.detail-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px}
+.detail-actions .btn{padding:13px 24px;font-size:11.5px}
+
+.gallery-head{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  margin-bottom:18px;flex-wrap:wrap;
+}
+.gallery-head h3{
+  font-size:12px;font-weight:800;letter-spacing:.24em;text-transform:uppercase;color:var(--cyan);
+}
+.gallery-head span{font-size:11.5px;color:var(--ink-faint);letter-spacing:.1em}
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:14px;
+}
+.gitem{
+  position:relative;
+  margin:0;
+  border-radius:16px;
+  overflow:hidden;
+  border:1px solid rgba(159,232,245,.2);
+  background:rgba(2,27,43,.5);
+  cursor:pointer;
+  aspect-ratio:4/3;
+  box-shadow:0 16px 34px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.14);
+  transition:transform .5s var(--ease), box-shadow .5s var(--ease), border-color .5s var(--ease);
+}
+.gitem img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
+.gitem figcaption{
+  position:absolute;left:10px;bottom:10px;
+  padding:4px 9px;border-radius:99px;
+  font-size:9.5px;font-weight:800;letter-spacing:.12em;
+  color:var(--cream);
+  background:rgba(2,27,43,.7);
+  border:1px solid rgba(159,232,245,.24);
+  backdrop-filter:blur(8px);
+}
+.gitem::after{
+  content:"⤢";
+  position:absolute;right:10px;top:10px;
+  display:grid;place-items:center;
+  width:28px;height:28px;border-radius:50%;
+  font-size:13px;color:var(--cream);
+  background:rgba(2,27,43,.66);
+  border:1px solid rgba(159,232,245,.24);
+  opacity:0;transform:translateY(-6px);
+  transition:opacity .4s var(--ease), transform .4s var(--ease);
+}
+.gitem:hover{
+  transform:translateY(-8px) rotateX(4deg);
+  border-color:var(--stroke-2);
+  box-shadow:0 30px 60px rgba(0,0,0,.55), 0 0 40px rgba(31,182,176,.25);
+}
+.gitem:hover img{transform:scale(1.08)}
+.gitem:hover::after{opacity:1;transform:none}
+
+/* lightbox */
+.lightbox{
+  position:fixed;inset:0;z-index:1400;
+  display:grid;place-items:center;
+  padding:clamp(12px,3vw,48px);
+  background:rgba(1,10,17,.9);
+  backdrop-filter:blur(18px);
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .4s var(--ease), visibility .4s var(--ease);
+}
+.lightbox.open{opacity:1;visibility:visible;pointer-events:auto}
+.lb-stage{
+  position:relative;
+  width:min(1150px,100%);
+  max-height:84vh;
+  border-radius:22px;
+  overflow:hidden;
+  border:1px solid rgba(159,232,245,.3);
+  background:rgba(2,27,43,.7);
+  box-shadow:0 50px 120px rgba(0,0,0,.7), 0 0 80px rgba(31,182,176,.2);
+  transform:scale(.94);
+  transition:transform .5s var(--ease);
+}
+.lightbox.open .lb-stage{transform:scale(1)}
+.lb-stage img{
+  width:100%;max-height:84vh;object-fit:contain;display:block;
+  background:radial-gradient(circle at 50% 40%, rgba(14,90,114,.6), rgba(2,27,43,.95));
+  transition:opacity .35s var(--ease);
+}
+.lb-bar{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:14px 18px;
+  border-top:1px solid rgba(159,232,245,.18);
+  background:rgba(2,27,43,.8);
+}
+.lb-bar b{
+  font-family:'Sora',sans-serif;font-size:11.5px;font-weight:700;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);
+}
+.lb-bar small{font-size:11px;color:var(--ink-faint);letter-spacing:.1em}
+.lb-nav{display:flex;gap:10px}
+.lb-btn{
+  display:grid;place-items:center;
+  width:42px;height:42px;border-radius:50%;
+  border:1px solid rgba(159,232,245,.28);
+  background:rgba(159,232,245,.07);
+  color:var(--cyan);font-size:17px;
+  transition:transform .3s var(--ease), background .3s var(--ease), color .3s var(--ease);
+}
+.lb-btn:hover{transform:translateY(-3px) scale(1.06);background:rgba(242,193,78,.16);color:var(--gold)}
+.lb-close{
+  position:absolute;top:14px;right:14px;z-index:3;
+  display:grid;place-items:center;
+  width:44px;height:44px;border-radius:50%;
+  border:1px solid rgba(159,232,245,.3);
+  background:rgba(2,27,43,.72);
+  color:var(--cream);font-size:19px;
+  backdrop-filter:blur(10px);
+  transition:transform .35s var(--ease), color .35s var(--ease);
+}
+.lb-close:hover{transform:rotate(90deg) scale(1.08);color:var(--gold)}
+
+/* =========================================================
+   14. RESPONSIVE
+========================================================= */
+@media (max-width:1080px){
+  .hero{grid-template-columns:1fr;min-height:auto;padding-top:130px;text-align:left}
+  .hero-visual{min-height:400px;margin-top:10px}
+  .contact-grid{grid-template-columns:1fr}
+  .detail-cols{grid-template-columns:1fr}
+}
+@media (max-width:860px){
+  .nav{display:none}
+  .site-header{padding-top:12px;padding-bottom:12px}
+  .brand-txt b{font-size:13px}
+  .floor{height:clamp(400px,80vw,520px)}
+}
+@media (max-width:620px){
+  .hero{padding-top:118px}
+  .hero-stats{gap:18px}
+  .hero-actions{gap:12px}
+  .btn{width:100%;justify-content:center}
+  .cta-btn{padding:10px 16px;font-size:11px}
+  .brand-txt span{display:none}
+  .floor{height:440px;perspective:1200px}
+  .floor-controls{gap:12px}
+  .gallery{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+  .detail-head{flex-wrap:wrap}
+  .detail-close{position:absolute;top:14px;right:14px;width:40px;height:40px}
+  .lb-stage img{max-height:70vh}
+  .footer-inner{flex-direction:column;align-items:flex-start}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+    scroll-behavior:auto !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================
+     SVG LOGO SPRITE
+====================================================== -->
+<svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+  <defs>
+    <linearGradient id="lgMain" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#9fe8f5"/>
+      <stop offset=".45" stop-color="#35d8c4"/>
+      <stop offset="1" stop-color="#f2c14e"/>
+    </linearGradient>
+    <linearGradient id="lgGlass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="rgba(255,255,255,.28)"/>
+      <stop offset="1" stop-color="rgba(255,255,255,.02)"/>
+    </linearGradient>
+  </defs>
+
+  <symbol id="jbLogo" viewBox="0 0 120 120">
+    <path d="M60 5 L105 31 L105 89 L60 115 L15 89 L15 31 Z"
+          fill="url(#lgGlass)" stroke="url(#lgMain)" stroke-width="2.4" stroke-linejoin="round"/>
+    <circle cx="60" cy="60" r="26" fill="none" stroke="url(#lgMain)" stroke-width="1.6" opacity=".62"/>
+    <path d="M70 41 V70 A11 11 0 0 1 48 70"
+          fill="none" stroke="url(#lgMain)" stroke-width="5.4" stroke-linecap="round"/>
+    <circle cx="60" cy="15" r="4" fill="#f2c14e"/>
+    <circle cx="105" cy="60" r="3.4" fill="#9fe8f5"/>
+    <circle cx="60" cy="105" r="3" fill="#35d8c4"/>
+    <circle cx="15" cy="60" r="2.6" fill="#f2c14e" opacity=".8"/>
+  </symbol>
+</svg>
+
+<!-- =====================================================
+     BACKGROUND
+====================================================== -->
+<div class="bg-aurora" aria-hidden="true"></div>
+<canvas id="bgCanvas" aria-hidden="true"></canvas>
+<div class="bg-scan" aria-hidden="true"></div>
+
+<!-- =====================================================
+     STARTUP SCREEN
+====================================================== -->
+<div class="boot" id="boot">
+  <canvas id="bootCanvas" aria-hidden="true"></canvas>
+  <div class="boot-inner">
+    <div class="boot-ring" aria-hidden="true"></div>
+    <div class="boot-ring two" aria-hidden="true"></div>
+    <div class="boot-logo">
+      <svg viewBox="0 0 120 120" aria-hidden="true"><use href="#jbLogo"/></svg>
+    </div>
+    <div class="boot-brand">JBG Digital</div>
+    <div class="boot-sub">Automation Lab</div>
+    <div class="boot-bar"><i></i></div>
+    <div class="boot-status">Initializing automation core <b>•</b></div>
+  </div>
+</div>
+
+<!-- =====================================================
+     HEADER
+====================================================== -->
+<header class="site-header" id="siteHeader">
+  <a href="#home" class="brand" aria-label="JBG Digital home">
+    <svg viewBox="0 0 120 120" aria-hidden="true"><use href="#jbLogo"/></svg>
+    <span class="brand-txt">
+      <b>JBG DIGITAL</b>
+      <span>Automation Lab</span>
+    </span>
+  </a>
+
+  <nav class="nav" id="mainNav" aria-label="Primary">
+    <a href="#home" class="active">Home</a>
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <a href="#contact" class="cta-btn">Get Started</a>
+</header>
+
+<main>
+
+<!-- =====================================================
+     HERO
+====================================================== -->
+<section class="hero" id="home">
+  <div class="hero-copy">
+    <span class="eyebrow">AI Automation Studio</span>
+    <h1>Turning Ideas Into <em>Intelligent Automation.</em></h1>
+    <p>
+      Building AI-powered systems, automation workflows and digital experiences
+      that transform complex processes into simple solutions.
+    </p>
+
+    <div class="hero-actions">
+      <a href="#projects" class="btn btn-primary">Explore Projects <span aria-hidden="true">→</span></a>
+      <a href="#services" class="btn btn-ghost">View Services</a>
+    </div>
+
+    <div class="hero-stats">
+      <div><b>10+</b><span>Automation Systems</span></div>
+      <div><b>100</b><span>Project Visuals</span></div>
+      <div><b>24/7</b><span>Autonomous Flow</span></div>
+    </div>
+  </div>
+
+  <div class="hero-visual" aria-hidden="true">
+    <div class="core">
+      <span class="core-ring r1"></span>
+      <span class="core-ring r2"></span>
+      <span class="core-ring r3"></span>
+      <span class="core-node n1"></span>
+      <span class="core-node n2"></span>
+      <span class="core-node n3"></span>
+      <div class="core-orb"><span>AUTOMATE</span></div>
+      <span class="core-chip c1">AI Agents</span>
+      <span class="core-chip c2">Workflow Engine</span>
+      <span class="core-chip c3">API Mesh</span>
+    </div>
+  </div>
+
+  <div class="scroll-hint" aria-hidden="true">
+    <span>Scroll</span>
+    <i></i>
+  </div>
+</section>
+
+<!-- =====================================================
+     ABOUT
+====================================================== -->
+<section class="section" id="about">
+  <div class="section-head reveal">
+    <span class="eyebrow">About the Lab</span>
+    <h2>Engineering <em>Autonomous Systems</em> With Craft</h2>
+    <p>
+      We design and build intelligent automation — from AI agents and workflow engines
+      to full digital products — with a focus on clarity, reliability and premium craft.
+    </p>
+  </div>
+
+  <div class="about-grid">
+    <article class="glass about-card reveal">
+      <span class="about-icon">◈</span>
+      <h3>AI-First Thinking</h3>
+      <p>Every system starts with the question: what should never need a human again? We design around outcomes, not features.</p>
+    </article>
+
+    <article class="glass about-card reveal">
+      <span class="about-icon">⬡</span>
+      <h3>Workflow Architecture</h3>
+      <p>Triggers, actions, queues and fallbacks mapped into resilient pipelines that keep running long after launch.</p>
+    </article>
+
+    <article class="glass about-card reveal">
+      <span class="about-icon">✦</span>
+      <h3>Premium Interfaces</h3>
+      <p>Automation is invisible until it is felt. We wrap powerful backends in interfaces people genuinely enjoy using.</p>
+    </article>
+  </div>
+</section>
+
+<!-- =====================================================
+     SERVICES
+====================================================== -->
+<section class="section" id="services">
+  <div class="section-head reveal">
+    <span class="eyebrow">Capabilities</span>
+    <h2>Services Built For <em>Scale &amp; Speed</em></h2>
+    <p>Ten focused disciplines covering the full automation stack — from a single script to an entire operating system for your business.</p>
+  </div>
+
+  <div class="services-grid" id="servicesGrid"></div>
+</section>
+
+<!-- =====================================================
+     TECHNOLOGIES
+====================================================== -->
+<section class="section" id="technologies">
+  <div class="section-head reveal">
+    <span class="eyebrow">Stack</span>
+    <h2>Technologies We <em>Automate With</em></h2>
+  </div>
+  <div class="tech-cloud" id="techCloud"></div>
+</section>
+
+<!-- =====================================================
+     3D PROJECT FLOOR
+====================================================== -->
+<section class="section projects" id="projects">
+  <div class="section-head reveal">
+    <span class="eyebrow">Selected Work</span>
+    <h2>The <em>3D Project Floor</em></h2>
+    <p>Ten automation systems placed on a rotating glass platform. Hover any project to bring it forward — click to open the full case study.</p>
+  </div>
+
+  <div class="floor-wrap">
+    <div class="floor" id="floor">
+      <div class="floor-glow" aria-hidden="true"></div>
+      <div class="floor-grid" aria-hidden="true"></div>
+      <div class="ring" id="floorRing"></div>
+    </div>
+
+    <div class="floor-controls">
+      <button class="floor-btn" id="prevProject" aria-label="Previous project">‹</button>
+      <span class="floor-hint">Auto-rotating showcase</span>
+      <button class="floor-btn" id="nextProject" aria-label="Next project">›</button>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     CONTACT
+====================================================== -->
+<section class="section" id="contact">
+  <div class="section-head reveal">
+    <span class="eyebrow">Start a Project</span>
+    <h2>Let's Automate <em>Something Great</em></h2>
+    <p>Tell us about the process you want to eliminate. We will map the workflow and send back a plan.</p>
+  </div>
+
+  <div class="contact-grid">
+    <div class="contact-copy reveal">
+      <h2>Build With JBG Digital</h2>
+      <p>Whether it is a single integration or a multi-agent automation platform, we start with your workflow and end with something that runs itself.</p>
+
+      <div class="contact-list">
+        <div><b>✉</b> hello@jbgdigital.dev</div>
+        <div><b>☎</b> +92 300 0000000</div>
+        <div><b>⌖</b> Remote · Pakistan</div>
+        <div><b>◷</b> Response within 24 hours</div>
+      </div>
+    </div>
+
+    <form class="glass contact-form reveal" id="contactForm" novalidate>
+      <div class="field">
+        <label for="cf-name">Your Name</label>
+        <input id="cf-name" name="name" type="text" placeholder="Jane Doe" required>
+      </div>
+      <div class="field">
+        <label for="cf-email">Email Address</label>
+        <input id="cf-email" name="email" type="email" placeholder="jane@company.com" required>
+      </div>
+      <div class="field">
+        <label for="cf-subject">Project Type</label>
+        <input id="cf-subject" name="subject" type="text" placeholder="AI Automation / Workflow / Web" required>
+      </div>
+      <div class="field">
+        <label for="cf-message">Message</label>
+        <textarea id="cf-message" name="message" placeholder="Describe the process you want to automate..." required></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">Send Message</button>
+      <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<!-- =====================================================
+     FOOTER
+====================================================== -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <svg viewBox="0 0 120 120" aria-hidden="true"><use href="#jbLogo"/></svg>
+      <b>JBG DIGITAL</b>
+    </div>
+    <nav class="footer-links" aria-label="Footer">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <p class="footer-note">© 2026 JBG Digital — Intelligent Automation Lab. All rights reserved.</p>
+  </div>
+</footer>
+
+<!-- =====================================================
+     PROJECT DETAIL OVERLAY
+====================================================== -->
+<div class="detail" id="detail" role="dialog" aria-modal="true" aria-labelledby="detailTitle" aria-hidden="true">
+  <div class="detail-shell" id="detailShell">
+    <div class="detail-head">
+      <div class="brand">
+        <svg viewBox="0 0 120 120" aria-hidden="true"><use href="#jbLogo"/></svg>
+      </div>
+      <div class="detail-head-main">
+        <span class="detail-cat" id="detailCategory">Category</span>
+        <h2 id="detailTitle">Project Title</h2>
+      </div>
+      <button class="detail-close" id="detailClose" aria-label="Close project">✕</button>
+    </div>
+
+    <div class="detail-body">
+      <div class="detail-cols">
+        <div>
+          <p id="detailLong"></p>
+
+          <h3>Languages &amp; Stack</h3>
+          <div class="badge-row" id="detailLangs"></div>
+
+          <h3>Technologies</h3>
+          <div class="badge-row" id="detailTech"></div>
+
+          <h3>Automation Workflow</h3>
+          <ul class="flow-list" id="detailWorkflow"></ul>
+
+          <h3>Key Features</h3>
+          <ul class="feature-list" id="detailFeatures"></ul>
+
+          <div class="detail-actions">
+            <a class="btn btn-primary" id="detailDemo" href="#" target="_blank" rel="noopener">Live Demo</a>
+            <a class="btn btn-ghost" id="detailGithub" href="#" target="_blank" rel="noopener">GitHub</a>
+          </div>
+        </div>
+
+        <div>
+          <h3>Tools &amp; Integrations</h3>
+          <div class="badge-row" id="detailTools"></div>
+
+          <h3>Project Overview</h3>
+          <p id="detailDesc"></p>
+
+          <h3>Impact</h3>
+          <ul class="feature-list" id="detailImpact"></ul>
+        </div>
+      </div>
+
+      <div class="gallery-head">
+        <h3>Project Gallery</h3>
+        <span id="galleryCount">10 images</span>
+      </div>
+      <div class="gallery" id="detailGallery"></div>
+    </div>
+  </div>
+</div>
+
+<!-- =====================================================
+     LIGHTBOX
+====================================================== -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer" aria-hidden="true">
+  <div class="lb-stage">
+    <button class="lb-close" id="lbClose" aria-label="Close image viewer">✕</button>
+    <img id="lbImage" src="" alt="">
+    <div class="lb-bar">
+      <div>
+        <b id="lbTitle">Project</b><br>
+        <small id="lbCounter">01 / 10</small>
+      </div>
+      <div class="lb-nav">
+        <button class="lb-btn" id="lbPrev" aria-label="Previous image">‹</button>
+        <button class="lb-btn" id="lbNext" aria-label="Next image">›</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   DATA
+========================================================= */
+const U = id => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=1100&q=72`;
+
+const PROJECTS = [
+  {
+    id:'ai-email-automation',
+    title:'AI Email Automation System',
+    category:'Email Intelligence',
+    short:'Inbox triage, AI classification and automated replies running 24/7.',
+    desc:'An end-to-end email operations engine that reads incoming mail, understands intent, drafts contextual responses and routes anything ambiguous to a human queue.',
+    long:'The AI Email Automation System replaces manual inbox management with a supervised AI pipeline. Every inbound message is parsed, classified by intent and urgency, enriched with CRM context, and either answered automatically or escalated with a suggested reply. The system logs every decision so teams can audit and continuously improve accuracy.',
+    languages:['Python','JavaScript','HTML','CSS'],
+    tech:['OpenAI API','IMAP / SMTP','Celery','Redis','React','PostgreSQL'],
+    tools:['Gmail API','Slack','HubSpot','Zapier','Docker'],
+    workflow:[
+      'Inbox listener captures new mail in real time',
+      'Parser extracts sender, thread context and attachments',
+      'AI classifier assigns intent, sentiment and priority',
+      'Response generator drafts a contextual reply',
+      'Router auto-sends or escalates to a human queue',
+      'Webhook syncs the outcome back into the CRM'
+    ],
+    features:[
+      'Multi-account inbox monitoring with zero polling lag',
+      'Confidence thresholding before auto-send',
+      'Thread-aware reply generation',
+      'Custom label and folder automation',
+      'Full audit log of every AI decision',
+      'Human-in-the-loop approval dashboard'
+    ],
+    impact:[
+      '78% reduction in manual triage time',
+      'Average first response under 40 seconds',
+      'Classification accuracy holding above 94%'
+    ],
+    demo:'#', github:'#',
+    images:[
+      U('1498050108023-c5249f4df085'),U('1555949963-aa79dcee981c'),U('1555066931-4365d14bab8c'),
+      U('1487058792275-0ad4aaf24ca7'),U('1526374965328-7f61d4dc18c5'),U('1516116216624-53e697fedbea'),
+      U('1504639725590-34d0984388bd'),U('1542831371-29b0f74f9713'),U('1571171637578-41bc2dd41cd2'),
+      U('1607252650355-f7fd0460ccdb')
+    ]
+  },
+  {
+    id:'ai-customer-support',
+    title:'AI Customer Support Automation',
+    category:'Support Ops',
+    short:'Knowledge-base grounded AI support with smart escalation.',
+    desc:'A retrieval-augmented support agent that resolves common questions instantly and hands complex cases to humans with full context attached.',
+    long:'This system combines a vector knowledge base with a conversational AI layer. Customer questions are embedded, matched against documentation, and answered with citations. When confidence drops or sentiment turns negative, the conversation is escalated with a generated summary so the human agent never starts from zero.',
+    languages:['Python','JavaScript','TypeScript'],
+    tech:['LangChain','Vector DB','OpenAI API','Node.js','React','WebSockets'],
+    tools:['Zendesk','Intercom','Notion','Pinecone','Docker'],
+    workflow:[
+      'Customer message arrives from chat, email or widget',
+      'Query is embedded and matched against the knowledge base',
+      'Relevant documents are retrieved and re-ranked',
+      'Response is generated with citations and tone control',
+      'Sentiment and confidence are scored in real time',
+      'Low-confidence threads escalate with an AI-written summary'
+    ],
+    features:[
+      'Retrieval-augmented answers grounded in real docs',
+      'Multichannel: web widget, email and in-app',
+      'Live sentiment and confidence scoring',
+      'Automatic escalation with context handoff',
+      'Conversation analytics and gap detection',
+      'Admin console for knowledge curation'
+    ],
+    impact:[
+      '62% of tickets resolved without human touch',
+      'Customer satisfaction up 21 points',
+      'Knowledge gaps surfaced automatically each week'
+    ],
+    demo:'#', github:'#',
+    images:[
+      U('1587560699334-cc4ff634909a'),U('1611926653458-09294b3142bf'),U('1556157382-97eda2d62296'),
+      U('1573497019940-1c28c88b4f3e'),U('1600880292203-757bb62b4baf'),U('1552664730-d307ca884978'),
+      U('1521737604893-d14cc237f11d'),U('1521737711867-e3b97375f902'),U('1587620962725-abab7fe55159'),
+      U('1605379399642-870262d3d051')
+    ]
+  },
+  {
+    id:'whatsapp-business-automation',
+    title:'WhatsApp Business Automation',
+    category:'Messaging',
+    short:'Conversational commerce and notifications on WhatsApp.',
+    desc:'A WhatsApp Business API engine handling inquiries, order updates and automated replies with a conversational flow builder.',
+    long:'Built on the WhatsApp Business Cloud API, this system manages inbound conversations, guides customers through structured flows, and pushes transactional notifications such as order confirmations and delivery updates. A visual flow builder lets non-technical teams design new journeys without touching code.',
+    languages:['JavaScript','Node.js','Python'],
+    tech:['WhatsApp Cloud API','Express','MongoDB','Redis','Webhooks'],
+    tools:['Meta Business','Twilio','Shopify','Firebase','Docker'],
+    workflow:[
+      'Customer sends a message to the business number',
+      'Webhook delivers the payload to the automation server',
+      'Intent is classified and matched to a journey',
+      'Flow engine sends interactive replies and buttons',
+      'Order or booking events trigger template notifications',
+      'Conversation state is persisted for continuity'
+    ],
+    features:[
+      'Interactive buttons, lists and quick replies',
+      'Template message scheduling and approval',
+      'Order and delivery status notifications',
+      'Visual drag-and-drop flow builder',
+      'Agent takeover with full conversation history',
+      'Delivery and read receipts analytics'
+    ],
+    impact:[
+      '3.4× faster customer response times',
+      'Abandoned cart recovery lifted by 18%',
+      'Support load reduced across peak hours'
+    ],
+    demo:'#', github:'#',
+    images:[
+      U('1611162617474-5b21e879e113'),U('1556742049-0cfed4f6a45d'),U('1512941937669-90a1b58e7e9c'),
+      U('1522199755839-a2bacb67c546'),U('1511707171634-5f897ff02aa9'),U('1512428559087-560fa5ceab42'),
+      U('1573164713988-8665fc963095'),U('1581091226825-a6a2a5aee158'),U('1610563166150-b34df4f3bcd6'),
+      U('1560472354-b33ff0c44a43')
+    ]
+  },
+  {
+    id:'ecommerce-order-automation',
+    title:'E-Commerce Order Automation',
+    category:'Commerce Ops',
+    short:'Orders, tracking and notifications fully orchestrated.',
+    desc:'An order lifecycle automation layer that syncs storefront, warehouse and customer communication into one reliable pipeline.',
+    long:'This platform watches the storefront for new orders and drives every downstream step automatically: inventory reservation, warehouse dispatch, courier booking, tracking generation and customer notification. Exceptions such as failed payments or out-of-stock items are caught early and routed to the right team.',
+    languages:['JavaScript','TypeScript','Python'],
+    tech:['Node.js','Shopify API','Stripe','PostgreSQL','React','BullMQ'],
+    tools:['Shopify','WooCommerce','ShipStation','Stripe','Slack'],
+    workflow:[
+      'Order placed on the storefront triggers a webhook',
+      'Payment status is verified and inventory reserved',
+      'Warehouse pick list is generated automatically',
+      'Courier API books the shipment and returns tracking',
+      'Customer receives tracking via email and WhatsApp',
+      'Exception handler routes failed or delayed orders'
+    ],
+    features:[
+      'Multi-storefront order unification',
+      'Automated inventory reconciliation',
+      'Courier and label generation',
+      'Customer notification sequencing',
+      'Refund and return workflow automation',
+      'Real-time operations dashboard'
+    ],
+    impact:[
+      'Order processing time cut by 71%',
+      'Manual data entry errors near zero',
+      'Same-day dispatch rate up 34%'
+    ],
+    demo:'#', github:'#',
+    images:[
+      U('1563013544-824ae1b704d3'),U('1472851294608-062f824d29cc'),U('1526304640581-d334cdbbf45e'),
+      U('1554224155-6726b3ff858f'),U('1542744173-8e7e53415bb0'),U('1454165804606-c3d57bc86b40'),
+      U('1553877522-43269d4ea984'),U('1522071820081-009f0129c71c'),U('1497366754035-f200968a6e72'),
+      U('1524758631624-e2822e304c36')
+    ]
+  },
+  {
+    id:'ai-lead-generation',
+    title:'AI Lead Generation Automation',
+    category:'Growth Engine',
+    short:'Capture, qualify and route leads without manual work.',
+    desc:'A lead intelligence pipeline that enriches incoming contacts, scores them with AI and pushes the best ones straight to sales.',
+    long:'Leads arrive from forms, ads, LinkedIn and inbound email. The system enriches each record with firmographic and behavioural data, applies an AI scoring model trained on historical wins, then routes hot leads to sales in real time while nurturing the rest automatically.',
+    languages:['Python','JavaScript','TypeScript'],
+    tech:['OpenAI API','Scikit-learn','Node.js','MongoDB','React','REST APIs'],
+    tools:['HubSpot','Salesforce','Clearbit','LinkedIn','Slack'],
+    workflow:[
+      'Lead captured from form, ad or inbound channel',
+      'Record enriched with company and role data',
+      'AI scoring model predicts conversion likelihood',
+      'Leads are categorised into hot, warm and nurture',
+      'Hot leads pushed to sales with an instant alert',
+      'Nurture sequences triggered for the remainder'
+    ],
+    features:[
+      'Real-time enrichment on capture',
+      'Explainable AI lead scoring',
+      'Automatic de-duplication across sources',
+      'CRM sync with activity timeline',
+      'Personalised nurture sequence generation',
+      'Weekly pipeline quality reporting'
+    ],
+    impact:[
+      'Qualified lead volume up 44%',
+      'Sales follow-up time down to under 3 minutes',
+      'Wasted outreach reduced significantly'
+    ],
+    demo:'#', github:'#',
+    images:[
+      U('1551288049-bebda4e38f71'),U('1460925895917-afdab827c52f'),U('1543286386-713bdd548da4'),
+      U('1591453089816-0fbb971b454c'),U('1504868584819-f8e8b4b6d7e3'),U('1526628953301-3e589a6a8b74'),
+      U('1614064641938-3bbee52942c7'),U('1550751827-4bd374c3f58b'),U('1573165231977-3f0e27806045'),
+      U('1544197150-b99a580bb7a8')
+    ]
+  },
+  {
+    id:'ai-social-media-automation',
+    title:'AI Social Media Automation',
+    category:'Content Ops',
+    short:'Content pipelines, captions and scheduling on autopilot.',
+    desc:'A content operations system that generates, organises and schedules social posts across multiple platforms with AI assistance.',
+    long:'The platform turns a content calendar into a fully automated publishing pipeline. AI drafts captions and hashtags from source material, media assets are auto-organised into campaigns, approvals happen in a shared board, and the scheduler publishes to every connected platform at optimal times.',
+    languages:['Python','JavaScript','HTML','CSS'],
+    tech:['OpenAI API','Node.js','React','MongoDB','Cloudinary','Cron'],
+    tools:['Meta Graph API','X API','LinkedIn API','Buffer','Figma'],
+    workflow:[
+      'Content brief or source material is ingested',
+      'AI generates captions, hooks and hashtags',
+      'Media assets are auto-tagged and organised',
+      'Draft enters an approval board for review',
+      'Scheduler queues posts at optimal time slots',
+      'Performance metrics feed back into the model'
+    ],
+    features:[
+      'Multi-platform publishing from one calendar',
+      'AI caption and hashtag generation',
+      'Automated media library organisation',
+      'Approval workflow with role permissions',
+      'Best-time-to-post recommendations',
+      'Engagement analytics dashboard'
+    ],
+    impact:[
+      'Content output increased 5×',
+      'Posting consistency at 100%',
+      'Engagement rate improved month over month'
+    ],
+    demo:'#', github:'#',
+    images:[
+      U('1563986768609-322da13575f3'),U('1531482615713-2afd69097998'),U('1499951360447-b19be8fe80f5'),
+      U('1517245386807-bb43f82c33c4'),U('1504384308090-c894fdcc538d'),U('1516321318423-f06f85e504b3'),
+      U('1517430816045-df4b7de11d1d'),U('1519389950473-47ba0277781c'),U('1551434678-e076c223a692'),
+      U('1522202176988-66273c2fd55f')
+    ]
+  },
+  {
+    id:'ai-document-processing',
+    title:'AI Document Processing Automation',
+    category:'Data Extraction',
+    short:'OCR, extraction and structured output from any document.',
+    desc:'A document intelligence pipeline that reads invoices, contracts and forms, then outputs clean structured data to your systems.',
+    long:'Uploaded documents pass through OCR, layout analysis and an AI extraction model that identifies fields, tables and clauses. Results are validated against business rules, flagged when uncertain, and pushed into the database or accounting system as structured records.',
+    languages:['Python','JavaScript'],
+    tech:['Tesseract','OpenAI Vision','FastAPI','React','PostgreSQL','S3'],
+    tools:['AWS S3','Google Drive','Dropbox','QuickBooks','Docker'],
+    workflow:[
+      'Document uploaded or pulled from a watched folder',
+      'OCR extracts raw text and layout coordinates',
+      'AI model identifies fields, tables and clauses',
+      'Extracted data validated against business rules',
+      'Uncertain fields flagged for human review',
+      'Structured record pushed to the destination system'
+    ],
+    features:[
+      'Multi-format support: PDF, scan, image, DOCX',
+      'Table and clause-level extraction',
+      'Confidence scoring per field',
+      'Human review queue for exceptions',
+      'Batch processing with parallel workers',
+      'Export to CSV, JSON and database'
+    ],
+    impact:[
+      'Manual data entry reduced by 85%',
+      'Processing time per document under 8 seconds',
+      'Extraction accuracy above 96% on invoices'
+    ],
+    demo:'#', github:'#',
+    images:[
+      U('1591696205602-2f950c417cb9'),U('1568667256549-094345857637'),U('1517842645767-c639042777db'),
+      U('1517048676732-d65bc937f952'),U('1543269865-cbf427effbad'),U('1497215728101-856f4ea42174'),
+      U('1497366811353-6870744d04b2'),U('1580894732444-8ecded7900cd'),U('1531973576160-7125cd663d86'),
+      U('1488190211105-8b0e65b80b4e')
+    ]
+  },
+  {
+    id:'ai-meeting-automation',
+    title:'AI Meeting Automation',
+    category:'Knowledge Ops',
+    short:'Transcription, summaries and action items extracted automatically.',
+    desc:'A meeting intelligence system that records, transcribes and converts conversations into decisions, tasks and follow-ups.',
+    long:'Every meeting is captured, transcribed with speaker separation, and analysed by an AI layer that produces a structured summary, a decision log and a list of assigned action items. Tasks are pushed into the project management tool and reminders are scheduled automatically.',
+    languages:['Python','TypeScript','JavaScript'],
+    tech:['Whisper','OpenAI API','Node.js','React','WebRTC','PostgreSQL'],
+    tools:['Zoom','Google Meet','Notion','Asana','Slack'],
+    workflow:[
+      'Meeting joined or recording uploaded',
+      'Audio transcribed with speaker diarisation',
+      'AI extracts summary, decisions and action items',
+      'Tasks assigned to owners with due dates',
+      'Records synced into the project management tool',
+      'Follow-up reminders scheduled automatically'
+    ],
+    features:[
+      'Speaker-separated transcription',
+      'Structured summaries and decision logs',
+      'Automatic action item extraction and assignment',
+      'Searchable meeting knowledge base',
+      'Integration with task managers',
+      'Multilingual transcription support'
+    ],
+    impact:[
+      'Meeting documentation time reduced by 90%',
+      'Action item follow-through up 47%',
+      'Searchable history across all calls'
+    ],
+    demo:'#', github:'#',
+    images:[
+      U('1524178232363-1fb2b075b655'),U('1556761175-b413da4baf72'),U('1515187029135-18ee286d815b'),
+      U('1509228468518-180dd4864904'),U('1484417894907-623942c8ee29'),U('1542626991-cbc4e32524cc'),
+      U('1550439062-609e1531270e'),U('1573164574572-cb89e39749b4'),U('1560179707-f14e90ef3623'),
+      U('1541746972996-4e0b0f43e02a')
+    ]
+  },
+  {
+    id:'business-workflow-automation',
+    title:'Business Workflow Automation Platform',
+    category:'Platform',
+    short:'A visual builder for multi-step business automation.',
+    desc:'A no-code workflow engine where teams design triggers, conditions and actions that connect every tool in the business.',
+    long:'The platform provides a visual canvas for building multi-step automations. Triggers listen to events across connected apps, conditional branches route logic, and actions execute API calls, notifications or database writes. Every run is logged with replay capability so failures can be diagnosed and retried instantly.',
+    languages:['Python','TypeScript','JavaScript'],
+    tech:['Node.js','React','PostgreSQL','Redis','REST & GraphQL','Docker'],
+    tools:['Stripe','Slack','Salesforce','Google Workspace','Webhooks'],
+    workflow:[
+      'User designs a workflow on the visual canvas',
+      'Trigger listens for an event from a connected app',
+      'Conditional branches evaluate business rules',
+      'Actions execute API calls, messages or DB writes',
+      'Run is logged with full input and output payloads',
+      'Failed steps retry automatically with backoff'
+    ],
+    features:[
+      'Drag-and-drop workflow canvas',
+      '150+ prebuilt app connectors',
+      'Conditional branching and loops',
+      'Run history with replay and retry',
+      'Role-based access and audit trails',
+      'Self-hosted or cloud deployment'
+    ],
+    impact:[
+      'Manual processes automated across 6 departments',
+      'Operational cost reduced by 38%',
+      'Average workflow runs in under 2 seconds'
+    ],
+    demo:'#', github:'#',
+    images:[
+      U('1556740738-b6a63e27c4df'),U('1557804506-669a67965ba0'),U('1559136555-9303baea8ebd'),
+      U('1600880292089-90a7e086ee0c'),U('1573497491208-6b1acb260507'),U('1560264280-88b68371db39'),
+      U('1521791136064-7986c2920216'),U('1451187580459-43490279c0fa'),U('1518709268805-4e9042af9f23'),
+      U('1558494949-ef010cbdcc31')
+    ]
+  },
+  {
+    id:'ai-multi-agent-system',
+    title:'AI Multi-Agent Automation System',
+    category:'Agentic AI',
+    short:'Coordinated agents that research, analyse and execute together.',
+    desc:'A multi-agent orchestration layer where specialised AI agents collaborate on research, analysis and task execution.',
+    long:'Instead of one model doing everything, this system deploys specialised agents — a researcher, an analyst, a writer and an executor — coordinated by an orchestrator. Agents share a memory layer, hand off tasks, critique each other\'s output and deliver a verified result with a full reasoning trace.',
+    languages:['Python','TypeScript','JavaScript'],
+    tech:['LangGraph','OpenAI API','Vector DB','Node.js','React','Redis'],
+    tools:['Pinecone','RabbitMQ','Docker','Slack','Notion'],
+    workflow:[
+      'Orchestrator receives a high-level objective',
+      'Task is decomposed into agent-specific subtasks',
+      'Research agent gathers and validates sources',
+      'Analysis agent interprets data and forms conclusions',
+      'Writer agent produces the structured deliverable',
+      'Verifier agent critiques output before final delivery'
+    ],
+    features:[
+      'Specialised agents with defined roles',
+      'Shared memory and context layer',
+      'Inter-agent critique and verification loop',
+      'Full reasoning trace for every decision',
+      'Human approval gates for critical actions',
+      'Horizontal scaling with task queues'
+    ],
+    impact:[
+      'Complex research tasks completed in minutes',
+      'Output quality validated by peer-agent review',
+      'Reasoning fully auditable end to end'
+    ],
+    demo:'#', github:'#',
+    images:[
+      U('1620712943543-bcc4688e7485'),U('1677442136019-21780ecad995'),U('1655720828018-edd2daec9349'),
+      U('1635070041078-e363dbe005cb'),U('1535378917042-10a22c95931a'),U('1555255707-c07966088b7b'),
+      U('1531746790731-6c087fecd65a'),U('1593508512255-86ab42a8e620'),U('1552308995-2baac1ad5490'),
+      U('1589254065878-42c9da997008')
+    ]
+  }
+];
+
+const SERVICES = [
+  {glyph:'⚙', title:'AI Automation',   text:'Custom AI pipelines that read, decide and act on your business data automatically.'},
+  {glyph:'⟳', title:'Workflow Automation', text:'Multi-step processes with triggers, conditions and actions connecting every tool.'},
+  {glyph:'◈', title:'Web Development',  text:'Fast, accessible and beautifully engineered web experiences built to scale.'},
+  {glyph:'⬡', title:'AI Agents',        text:'Specialised autonomous agents that research, reason and execute tasks.'},
+  {glyph:'⇄', title:'API Integration',  text:'Reliable connectors that make disconnected systems behave like one platform.'},
+  {glyph:'▤', title:'Business Automation', text:'Operations, reporting and approvals automated end to end.'},
+  {glyph:'⛁', title:'E-Commerce Automation', text:'Orders, inventory, fulfilment and customer messaging on autopilot.'},
+  {glyph:'✆', title:'AI Chatbots',      text:'Knowledge-grounded assistants for support, sales and internal helpdesks.'},
+  {glyph:'◫', title:'Data Automation',  text:'Extraction, cleaning, enrichment and delivery of structured data at scale.'},
+  {glyph:'⬢', title:'Custom Software',  text:'Bespoke systems designed around the exact shape of your business.'}
+];
+
+const TECH = [
+  'Python','JavaScript','TypeScript','Node.js','React','HTML','CSS',
+  'OpenAI API','LangChain','LangGraph','FastAPI','PostgreSQL','MongoDB','Redis',
+  'Docker','REST API','GraphQL','Webhooks','Vector DB','Celery','BullMQ',
+  'WhatsApp API','Shopify API','Stripe','AWS','OCR / Tesseract','WebSockets'
+];
+
+/* =========================================================
+   PLACEHOLDER FALLBACK FOR IMAGES
+========================================================= */
+function placeholder(label){
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="900" height="650">
+    <defs>
+      <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#062b3f"/>
+        <stop offset=".5" stop-color="#0a4157"/>
+        <stop offset="1" stop-color="#0d3b2e"/>
+      </linearGradient>
+    </defs>
+    <rect width="900" height="650" fill="url(#g)"/>
+    <circle cx="200" cy="160" r="190" fill="#1fb6b0" opacity=".16"/>
+    <circle cx="740" cy="500" r="210" fill="#f2c14e" opacity=".10"/>
+    <text x="450" y="340" font-family="Arial, sans-serif" font-size="42"
+          fill="#9fe8f5" text-anchor="middle" opacity=".85">${label}</text>
+  </svg>`;
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+}
+function guardImage(img, label){
+  img.addEventListener('error', function handler(){
+    img.removeEventListener('error', handler);
+    img.src = placeholder(label);
+  });
+}
+
+/* =========================================================
+   SERVICES + TECH RENDER
+========================================================= */
+(function renderServices(){
+  const grid = document.getElementById('servicesGrid');
+  grid.innerHTML = SERVICES.map((s, i) => `
+    <article class="glass svc reveal">
+      <span class="svc-num">${String(i + 1).padStart(2, '0')}</span>
+      <span class="svc-glyph">${s.glyph}</span>
+      <h3>${s.title}</h3>
+      <p>${s.text}</p>
+    </article>
+  `).join('');
+})();
+
+(function renderTech(){
+  const cloud = document.getElementById('techCloud');
+  cloud.innerHTML = TECH.map(t => `<span class="tech-pill">${t}</span>`).join('');
+})();
+
+/* =========================================================
+   3D PROJECT FLOOR
+========================================================= */
+const floorEl   = document.getElementById('floor');
+const ringEl    = document.getElementById('floorRing');
+const cards     = [];
+
+let ringAngle  = 0;
+let ringTarget = 0;
+let stepAngle  = (Math.PI * 2) / PROJECTS.length;
+let radius     = 560;
+let hovering   = false;
+let paused     = false;
+let floorVisible = true;
+
+function buildFloor(){
+  ringEl.innerHTML = '';
+  cards.length = 0;
+
+  PROJECTS.forEach((p, i) => {
+    const card = document.createElement('article');
+    card.className = 'pcard';
+    card.tabIndex = 0;
+    card.setAttribute('role', 'link');
+    card.setAttribute('aria-label', `${p.title} — open project`);
+    card.dataset.id = p.id;
+
+    card.innerHTML = `
+      <div class="pcard-glass">
+        <div class="pcard-top">
+          <span class="pcard-brand">
+            <svg viewBox="0 0 120 120" aria-hidden="true"><use href="#jbLogo"/></svg>
+            <b>JBG</b>
+          </span>
+          <span class="pcard-cat">${p.category}</span>
+        </div>
+        <div class="pcard-media">
+          <img loading="lazy" decoding="async" src="${p.images[0]}" alt="${p.title} preview">
+          <span class="pcard-shine"></span>
+        </div>
+        <h3>${p.title}</h3>
+        <p>${p.short}</p>
+        <div class="pcard-langs">
+          ${p.languages.slice(0, 4).map(l => `<span class="lang">${l}</span>`).join('')}
+        </div>
+        <div class="pcard-foot">
+          <span class="pcard-open">Open Project</span>
+          <span class="pcard-num">${String(i + 1).padStart(2, '0')}</span>
+        </div>
+      </div>
+    `;
+
+    const img = card.querySelector('img');
+    guardImage(img, p.title);
+
+    card.addEventListener('pointerenter', () => { hovering = true; });
+    card.addEventListener('pointerleave', () => { hovering = false; });
+
+    card.addEventListener('click', () => openProject(p.id));
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openProject(p.id);
+      }
+    });
+
+    ringEl.appendChild(card);
+    cards.push({
+      el: card,
+      base: i * stepAngle,
+      hover: 0,
+      hoverTarget: 0
+    });
+  });
+}
+
+function computeRadius(){
+  const w = floorEl.clientWidth || window.innerWidth;
+  const mobile = w < 720;
+  if (mobile){
+    radius = Math.max(260, w * 0.72);
+    floorEl.style.setProperty('--cw', '206px');
+    ringEl.querySelectorAll('.pcard-glass').forEach(g => { g.style.height = '348px'; });
+    ringEl.querySelectorAll('.pcard-media').forEach(m => { m.style.height = '112px'; });
+    ringEl.querySelectorAll('.pcard').forEach(c => { c.style.marginTop = '-174px'; });
+  } else {
+    radius = Math.min(620, Math.max(420, w * 0.52));
+    floorEl.style.setProperty('--cw', '300px');
+    ringEl.querySelectorAll('.pcard-glass').forEach(g => { g.style.height = '410px'; });
+    ringEl.querySelectorAll('.pcard-media').forEach(m => { m.style.height = '145px'; });
+    ringEl.querySelectorAll('.pcard').forEach(c => { c.style.marginTop = '-205px'; });
+  }
+}
+
+function tick(){
+  ringAngle += (ringTarget - ringAngle) * 0.055;
+
+  for (let i = 0; i < cards.length; i++){
+    const c = cards[i];
+    const a = c.base + ringAngle;
+    const sin = Math.sin(a);
+    const cos = Math.cos(a);
+
+    let x = sin * radius;
+    let z = cos * radius;
+    let y = -cos * 18;
+
+    const depth = (z + radius) / (2 * radius);   // 0 = back, 1 = front
+    let scale   = 0.68 + depth * 0.34;
+    let opacity = 0.26 + depth * 0.74;
+    let rotY    = a * (180 / Math.PI);
+
+    c.hover += (c.hoverTarget - c.hover) * 0.13;
+
+    if (c.hover > 0.001){
+      rotY = rotY * (1 - c.hover);
+      z += c.hover * 170;
+      y -= c.hover * 30;
+      scale += c.hover * 0.11;
+      opacity = Math.min(1, opacity + c.hover * 0.5);
+    }
+
+    c.el.style.transform =
+      `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, ${z.toFixed(2)}px) ` +
+      `rotateY(${rotY.toFixed(2)}deg) rotateX(6deg) scale(${scale.toFixed(3)})`;
+    c.el.style.opacity = opacity.toFixed(3);
+    c.el.style.zIndex  = Math.round(z + radius);
+  }
+
+  requestAnimationFrame(tick);
+}
+
+/* auto rotation every 2 seconds */
+let autoTimer = null;
+function startAuto(){
+  clearInterval(autoTimer);
+  autoTimer = setInterval(() => {
+    if (paused || hovering || !floorVisible) return;
+    ringTarget += stepAngle;
+  }, 2000);
+}
+
+/* controls */
+document.getElementById('prevProject').addEventListener('click', () => {
+  ringTarget -= stepAngle;
+});
+document.getElementById('nextProject').addEventListener('click', () => {
+  ringTarget += stepAngle;
+});
+
+/* touch swipe */
+(function swipe(){
+  let startX = 0, startY = 0, active = false;
+  floorEl.addEventListener('touchstart', e => {
+    const t = e.touches[0];
+    startX = t.clientX; startY = t.clientY; active = true;
+    paused = true;
+  }, {passive:true});
+
+  floorEl.addEventListener('touchend', e => {
+    if (!active) return;
+    active = false;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - startX;
+    const dy = t.clientY - startY;
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)){
+      ringTarget += dx < 0 ? stepAngle : -stepAngle;
+    }
+    setTimeout(() => { paused = false; }, 400);
+  }, {passive:true});
+})();
+
+/* =========================================================
+   PROJECT DETAIL
+========================================================= */
+const detailEl       = document.getElementById('detail');
+const detailTitle    = document.getElementById('detailTitle');
+const detailCategory = document.getElementById('detailCategory');
+const detailDesc     = document.getElementById('detailDesc');
+const detailLong     = document.getElementById('detailLong');
+const detailLangs    = document.getElementById('detailLangs');
+const detailTech     = document.getElementById('detailTech');
+const detailTools    = document.getElementById('detailTools');
+const detailWorkflow = document.getElementById('detailWorkflow');
+const detailFeatures = document.getElementById('detailFeatures');
+const detailImpact   = document.getElementById('detailImpact');
+const detailGallery  = document.getElementById('detailGallery');
+const galleryCount   = document.getElementById('galleryCount');
+const detailDemo     = document.getElementById('detailDemo');
+const detailGithub   = document.getElementById('detailGithub');
+
+let currentProject = null;
+
+function openProject(id){
+  const p = PROJECTS.find(x => x.id === id);
+  if (!p) return;
+
+  currentProject = p;
+  paused = true;
+
+  detailTitle.textContent    = p.title;
+  detailCategory.textContent = p.category;
+  detailDesc.textContent     = p.desc;
+  detailLong.textContent     = p.long;
+
+  detailLangs.innerHTML = p.languages.map(l => `<span class="badge badge-lang">${l}</span>`).join('');
+  detailTech.innerHTML  = p.tech.map(t => `<span class="badge">${t}</span>`).join('');
+  detailTools.innerHTML = p.tools.map(t => `<span class="badge badge-soft">${t}</span>`).join('');
+
+  detailWorkflow.innerHTML = p.workflow.map((w, i) =>
+    `<li><b>${String(i + 1).padStart(2, '0')}</b><span>${w}</span></li>`).join('');
+
+  detailFeatures.innerHTML = p.features.map(f => `<li>${f}</li>`).join('');
+  detailImpact.innerHTML   = p.impact.map(f => `<li>${f}</li>`).join('');
+
+  galleryCount.textContent = `${p.images.length} images`;
+
+  detailGallery.innerHTML = p.images.map((src, i) => `
+    <figure class="gitem" data-index="${i}" tabindex="0" role="button"
+            aria-label="Open image ${i + 1} of ${p.images.length}">
+      <img loading="lazy" decoding="async" src="${src}" alt="${p.title} — image ${i + 1}">
+      <figcaption>${String(i + 1).padStart(2, '0')}</figcaption>
+    </figure>
+  `).join('');
+
+  detailGallery.querySelectorAll('.gitem').forEach(fig => {
+    const img = fig.querySelector('img');
+    guardImage(img, `${p.title} ${fig.dataset.index}`);
+    fig.addEventListener('click', () => openLightbox(Number(fig.dataset.index)));
+    fig.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        openLightbox(Number(fig.dataset.index));
+      }
+    });
+  });
+
+  detailDemo.href   = p.demo   || '#';
+  detailGithub.href = p.github || '#';
+
+  detailEl.classList.add('open');
+  detailEl.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('detailShell').scrollTop = 0;
+  document.querySelector('.detail-body').scrollTop = 0;
+}
+
+function closeProject(){
+  detailEl.classList.remove('open');
+  detailEl.setAttribute('aria-hidden', 'true');
+  if (!lightboxEl.classList.contains('open')){
+    document.body.style.overflow = '';
+  }
+  currentProject = null;
+  setTimeout(() => { paused = false; }, 300);
+}
+
+document.getElementById('detailClose').addEventListener('click', closeProject);
+detailEl.addEventListener('click', e => {
+  if (e.target === detailEl) closeProject();
+});
+
+/* =========================================================
+   LIGHTBOX
+========================================================= */
+const lightboxEl = document.getElementById('lightbox');
+const lbImage    = document.getElementById('lbImage');
+const lbTitle    = document.getElementById('lbTitle');
+const lbCounter  = document.getElementById('lbCounter');
+let lbIndex = 0;
+
+function openLightbox(index){
+  if (!currentProject) return;
+  lbIndex = index;
+  lightboxEl.classList.add('open');
+  lightboxEl.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+  renderLightbox();
+}
+
+function renderLightbox(){
+  if (!currentProject) return;
+  const p = currentProject;
+  const src = p.images[lbIndex];
+
+  lbImage.style.opacity = '0';
+  const tmp = new Image();
+  tmp.onload = () => {
+    lbImage.src = src;
+    lbImage.alt = `${p.title} — image ${lbIndex + 1}`;
+    lbImage.style.opacity = '1';
+  };
+  tmp.onerror = () => {
+    lbImage.src = placeholder(`${p.title} ${lbIndex + 1}`);
+    lbImage.alt = `${p.title} — image ${lbIndex + 1}`;
+    lbImage.style.opacity = '1';
+  };
+  tmp.src = src;
+
+  lbTitle.textContent   = p.title;
+  lbCounter.textContent = `${String(lbIndex + 1).padStart(2, '0')} / ${String(p.images.length).padStart(2, '0')}`;
+}
+
+function lbStep(dir){
+  if (!currentProject) return;
+  const len = currentProject.images.length;
+  lbIndex = (lbIndex + dir + len) % len;
+  renderLightbox();
+}
+
+function closeLightbox(){
+  lightboxEl.classList.remove('open');
+  lightboxEl.setAttribute('aria-hidden', 'true');
+  if (!detailEl.classList.contains('open')){
+    document.body.style.overflow = '';
+  }
+}
+
+document.getElementById('lbClose').addEventListener('click', closeLightbox);
+document.getElementById('lbPrev').addEventListener('click', () => lbStep(-1));
+document.getElementById('lbNext').addEventListener('click', () => lbStep(1));
+lightboxEl.addEventListener('click', e => {
+  if (e.target === lightboxEl) closeLightbox();
+});
+
+/* keyboard */
+document.addEventListener('keydown', e => {
+  if (lightboxEl.classList.contains('open')){
+    if (e.key === 'Escape')     closeLightbox();
+    if (e.key === 'ArrowLeft')  lbStep(-1);
+    if (e.key === 'ArrowRight') lbStep(1);
+    return;
+  }
+  if (detailEl.classList.contains('open')){
+    if (e.key === 'Escape') closeProject();
+  }
+});
+
+/* =========================================================
+   CONTACT FORM
+========================================================= */
+const contactForm = document.getElementById('contactForm');
+const formStatus  = document.getElementById('formStatus');
+
+if (contactForm){
+  contactForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const name = contactForm.querySelector('#cf-name').value.trim();
+    const email = contactForm.querySelector('#cf-email').value.trim();
+
+    if (!name || !email){
+      formStatus.textContent = 'Please complete the required fields.';
+      formStatus.style.color = '#f2c14e';
+      return;
+    }
+
+    formStatus.style.color = '';
+    formStatus.textContent = `Thanks ${name.split(' ')[0]} — your message has been queued in the automation pipeline.`;
+    contactForm.reset();
+  });
+}
+
+/* =========================================================
+   HEADER + SCROLL SPY
+========================================================= */
+const headerEl = document.getElementById('siteHeader');
+window.addEventListener('scroll', () => {
+  headerEl.classList.toggle('shrink', window.scrollY > 40);
+}, {passive:true});
+
+const navLinks = Array.from(document.querySelectorAll('#mainNav a'));
+const sections = navLinks
+  .map(a => document.querySelector(a.getAttribute('href')))
+  .filter(Boolean);
+
+const spy = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting){
+      const id = '#' + entry.target.id;
+      navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === id));
+    }
+  });
+}, { rootMargin: '-45% 0px -50% 0px' });
+
+sections.forEach(s => spy.observe(s));
+
+/* =========================================================
+   REVEAL
+========================================================= */
+const revealer = new IntersectionObserver(entries => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting){
+      const el = entry.target;
+      const delay = Number(el.dataset.delay || (i * 70));
+      setTimeout(() => el.classList.add('in'), delay);
+      revealer.unobserve(el);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+
+function observeReveals(){
+  document.querySelectorAll('.reveal:not(.in)').forEach(el => revealer.observe(el));
+}
+
+/* =========================================================
+   FLOOR VISIBILITY (perf)
+========================================================= */
+const floorObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => { floorVisible = entry.isIntersecting; });
+}, { threshold: 0.05 });
+floorObserver.observe(floorEl);
+
+/* =========================================================
+   BACKGROUND PARTICLE NETWORK
+========================================================= */
+(function backgroundCanvas(){
+  const canvas = document.getElementById('bgCanvas');
+  const ctx = canvas.getContext('2d');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let w, h, dpr;
+  let particles = [];
+  let raf = null;
+
+  function resize(){
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = canvas.width  = Math.floor(window.innerWidth  * dpr);
+    h = canvas.height = Math.floor(window.innerHeight * dpr);
+    canvas.style.width  = window.innerWidth + 'px';
+    canvas.style.height = window.innerHeight + 'px';
+    build();
+  }
+
+  function build(){
+    const count = window.innerWidth < 720 ? 26 : 54;
+    particles = [];
+    for (let i = 0; i < count; i++){
+      particles.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.16 * dpr,
+        vy: (Math.random() - 0.5) * 0.16 * dpr,
+        r: (Math.random() * 1.7 + 0.7) * dpr,
+        gold: Math.random() > 0.78
+      });
+    }
+  }
+
+  function draw(){
+    ctx.clearRect(0, 0, w, h);
+
+    for (let i = 0; i < particles.length; i++){
+      const p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+
+      if (p.x < 0) p.x = w; else if (p.x > w) p.x = 0;
+      if (p.y < 0) p.y = h; else if (p.y > h) p.y = 0;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.gold ? 'rgba(242,193,78,.55)' : 'rgba(159,232,245,.5)';
+      ctx.fill();
+
+      for (let j = i + 1; j < particles.length; j++){
+        const q = particles[j];
+        const dx = p.x - q.x, dy = p.y - q.y;
+        const dist = Math.hypot(dx, dy);
+        const max = 165 * dpr;
+        if (dist < max){
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(q.x, q.y);
+          ctx.strokeStyle = `rgba(31,182,176,${(1 - dist / max) * 0.16})`;
+          ctx.lineWidth = dpr * 0.6;
+          ctx.stroke();
+        }
+      }
+    }
+
+    raf = requestAnimationFrame(draw);
+  }
+
+  resize();
+  window.addEventListener('resize', resize, {passive:true});
+
+  if (!reduce) draw();
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden){
+      cancelAnimationFrame(raf);
+      raf = null;
+    } else if (!raf && !reduce){
+      draw();
+    }
+  });
+})();
+
+/* =========================================================
+   BOOT SCREEN PARTICLES + EXIT
+========================================================= */
+(function bootParticles(){
+  const canvas = document.getElementById('bootCanvas');
+  const ctx = canvas.getContext('2d');
+  let w, h, dpr, dots = [], raf = null, running = true;
+
+  function resize(){
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = canvas.width  = Math.floor(window.innerWidth * dpr);
+    h = canvas.height = Math.floor(window.innerHeight * dpr);
+    canvas.style.width = window.innerWidth + 'px';
+    canvas.style.height = window.innerHeight + 'px';
+    dots = [];
+    const count = window.innerWidth < 720 ? 34 : 70;
+    for (let i = 0; i < count; i++){
+      dots.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vy: -(Math.random() * 0.35 + 0.08) * dpr,
+        r: (Math.random() * 1.8 + 0.6) * dpr,
+        a: Math.random() * 0.6 + 0.2,
+        gold: Math.random() > 0.74
+      });
+    }
+  }
+
+  function draw(){
+    if (!running) return;
+    ctx.clearRect(0, 0, w, h);
+    for (const d of dots){
+      d.y += d.vy;
+      if (d.y < -10) { d.y = h + 10; d.x = Math.random() * w; }
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+      ctx.fillStyle = d.gold
+        ? `rgba(242,193,78,${d.a})`
+        : `rgba(159,232,245,${d.a})`;
+      ctx.fill();
+    }
+    raf = requestAnimationFrame(draw);
+  }
+
+  resize();
+  window.addEventListener('resize', resize, {passive:true});
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) draw();
+
+  window.__stopBootParticles = function(){
+    running = false;
+    cancelAnimationFrame(raf);
+  };
+})();
+
+function finishBoot(){
+  const boot = document.getElementById('boot');
+  if (!boot || boot.classList.contains('is-done')) return;
+  boot.classList.add('is-done');
+  if (window.__stopBootParticles) window.__stopBootParticles();
+  setTimeout(() => { boot.style.display = 'none'; }, 1100);
+}
+
+window.addEventListener('load', () => {
+  const MIN_BOOT = 2500;
+  const started = performance.now();
+  const wait = Math.max(0, MIN_BOOT - (started - (window.__navStart || 0)));
+  setTimeout(finishBoot, wait);
+});
+/* safety: never trap the user */
+setTimeout(finishBoot, 5200);
+
+/* =========================================================
+   INIT
+========================================================= */
+(function init(){
+  buildFloor();
+  computeRadius();
+  observeReveals();
+  startAuto();
+  requestAnimationFrame(tick);
+
+  let resizeTimer = null;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      computeRadius();
+      observeReveals();
+    }, 180);
+  }, {passive:true});
+})();
+</script>
+
+</body>
+</html>
