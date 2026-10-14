@@ -254,14 +254,16 @@ h1,h2,h3,h4{font-family:'Sora','Trebuchet MS',sans-serif;font-weight:700;line-he
   backdrop-filter:blur(20px) saturate(150%);
   -webkit-backdrop-filter:blur(20px) saturate(150%);
   border-bottom:1px solid rgba(159,232,245,.12);
-  transition:padding .35s var(--ease), background .35s var(--ease);
+  transition:padding .35s var(--ease), background .35s var(--ease), box-shadow .35s var(--ease);
 }
-.site-header.shrink{padding-top:9px;padding-bottom:9px;background:rgba(2,27,43,.9)}
+.site-header.shrink{padding-top:7px;padding-bottom:7px;background:rgba(2,27,43,.94);box-shadow:0 12px 32px rgba(0,0,0,.22)}
 .brand{display:flex;align-items:center;gap:12px}
 .brand img{
   width:170px;height:auto;display:block;
   filter:drop-shadow(0 6px 18px rgba(242,193,78,.2));
+  transition:width .35s var(--ease),filter .35s var(--ease);
 }
+.site-header.shrink .brand img{width:132px}
 .brand-txt{display:flex;flex-direction:column;line-height:1}
 .brand-txt b{
   font-family:'Sora',sans-serif;font-size:15px;font-weight:800;
@@ -276,12 +278,15 @@ h1,h2,h3,h4{font-family:'Sora','Trebuchet MS',sans-serif;font-weight:700;line-he
   border:1px solid rgba(159,232,245,.16);
   background:rgba(255,255,255,.04);
   backdrop-filter:blur(12px);
+  transition:padding .35s var(--ease),gap .35s var(--ease);
 }
+.site-header.shrink .nav{padding:3px 7px;gap:3px}
 .nav a{
   position:relative;padding:8px 15px;border-radius:99px;
   font-size:12.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
   color:var(--ink-soft);transition:color .3s var(--ease), background .3s var(--ease);
 }
+.site-header.shrink .nav a{padding:6px 12px}
 .nav a:hover{color:var(--cream);background:rgba(159,232,245,.09)}
 .nav a.active{color:var(--ocean-1);background:linear-gradient(135deg,var(--cyan),var(--aqua))}
 .cta-btn{
@@ -3323,9 +3328,11 @@ if (contactForm){
    HEADER + SCROLL SPY
 ========================================================= */
 const headerEl = document.getElementById('siteHeader');
-window.addEventListener('scroll', () => {
+const updateHeaderState = () => {
   headerEl.classList.toggle('shrink', window.scrollY > 40);
-}, {passive:true});
+};
+window.addEventListener('scroll', updateHeaderState, {passive:true});
+updateHeaderState();
 
 const navLinks = Array.from(document.querySelectorAll('#mainNav a'));
 const sections = navLinks
