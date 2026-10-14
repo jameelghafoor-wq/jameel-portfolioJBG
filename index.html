@@ -1854,393 +1854,336 @@ const U = id => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=
 
 const PROJECTS = [
   {
-    id:'ai-email-automation',
-    title:'AI Email Automation System',
-    category:'Email Intelligence',
-    short:'Inbox triage, AI classification and automated replies running 24/7.',
-    desc:'An end-to-end email operations engine that reads incoming mail, understands intent, drafts contextual responses and routes anything ambiguous to a human queue.',
-    long:'The AI Email Automation System replaces manual inbox management with a supervised AI pipeline. Every inbound message is parsed, classified by intent and urgency, enriched with CRM context, and either answered automatically or escalated with a suggested reply. The system logs every decision so teams can audit and continuously improve accuracy.',
-    languages:['Python','JavaScript','HTML','CSS'],
-    tech:['OpenAI API','IMAP / SMTP','Celery','Redis','React','PostgreSQL'],
-    tools:['Gmail API','Slack','HubSpot','Zapier','Docker'],
+    id:'genesis',
+    title:'Genesis',
+    category:'AI Growth Platform',
+    short:'A strategic AI platform built to accelerate growth, workflows and operational intelligence.',
+    desc:'Genesis is a future-ready AI system focused on growth strategy, operations and intelligent automation for modern digital teams.',
+    long:'Genesis unifies product thinking, automation logic and decision support into one AI-powered platform. It helps teams move faster by turning scattered processes into measurable workflows, smart recommendations and systemised execution.',
+    languages:['Next.js','TypeScript','Python'],
+    tech:['OpenAI','RAG','FastAPI','React','Vercel'],
+    tools:['Supabase','PostgreSQL','Docker','Stripe','Notion'],
     workflow:[
-      'Inbox listener captures new mail in real time',
-      'Parser extracts sender, thread context and attachments',
-      'AI classifier assigns intent, sentiment and priority',
-      'Response generator drafts a contextual reply',
-      'Router auto-sends or escalates to a human queue',
-      'Webhook syncs the outcome back into the CRM'
+      'Strategy data is mapped into an AI-ready knowledge layer',
+      'Prompt workflows guide decisions and recommendations',
+      'Automation triggers execute tasks across the stack',
+      'Insights are surfaced through a live dashboard',
+      'AI suggestions are refined through human review',
+      'Execution loops continuously improve with feedback'
     ],
     features:[
-      'Multi-account inbox monitoring with zero polling lag',
-      'Confidence thresholding before auto-send',
-      'Thread-aware reply generation',
-      'Custom label and folder automation',
-      'Full audit log of every AI decision',
-      'Human-in-the-loop approval dashboard'
+      'AI-powered growth and operational planning',
+      'Smart workflow orchestration and decision support',
+      'Dashboard-based visibility for actions and outcomes',
+      'Human feedback loop to improve recommendation quality',
+      'Built for scalable experimentation and iteration',
+      'Clear interface for business teams and operators'
     ],
     impact:[
-      '78% reduction in manual triage time',
-      'Average first response under 40 seconds',
-      'Classification accuracy holding above 94%'
+      'Built for high-velocity AI operations',
+      'Improves clarity around product and growth decisions',
+      'Creates a repeatable experimentation engine'
     ],
-    demo:'#', github:'#',
+    demo:'https://genese-ascent.vercel.app/', github:'#',
     images:[
       U('1498050108023-c5249f4df085'),U('1555949963-aa79dcee981c'),U('1555066931-4365d14bab8c'),
-      U('1487058792275-0ad4aaf24ca7'),U('1526374965328-7f61d4dc18c5'),U('1516116216624-53e697fedbea'),
-      U('1504639725590-34d0984388bd'),U('1542831371-29b0f74f9713'),U('1571171637578-41bc2dd41cd2'),
-      U('1607252650355-f7fd0460ccdb')
+      U('1487058792275-0ad4aaf24ca7'),U('1526374965328-7f61d4dc18c5'),U('1516116216624-53e697fedbea')
     ]
   },
   {
-    id:'ai-customer-support',
-    title:'AI Customer Support Automation',
-    category:'Support Ops',
-    short:'Knowledge-base grounded AI support with smart escalation.',
-    desc:'A retrieval-augmented support agent that resolves common questions instantly and hands complex cases to humans with full context attached.',
-    long:'This system combines a vector knowledge base with a conversational AI layer. Customer questions are embedded, matched against documentation, and answered with citations. When confidence drops or sentiment turns negative, the conversation is escalated with a generated summary so the human agent never starts from zero.',
+    id:'ai-medical-assistant',
+    title:'AI Medical Assistant',
+    category:'Healthcare AI',
+    short:'A virtual medical assistant designed to simplify patient support and clinical guidance.',
+    desc:'This intelligent health assistant provides conversational support, relevant medical information and structured guidance in a safe, user-friendly format.',
+    long:'The AI Medical Assistant is designed to reduce friction in healthcare support by enabling fast patient interactions, guided triage and information retrieval. It helps both users and care teams move through common questions with greater clarity and less delay.',
+    languages:['Next.js','Python','TypeScript'],
+    tech:['OpenAI','RAG','FastAPI','LangChain','React'],
+    tools:['Vercel','Supabase','PostgreSQL','Twilio','FHIR'],
+    workflow:[
+      'User asks a health-related question or needs support',
+      'Knowledge retrieval checks relevant medical guidance and context',
+      'AI synthesizes a structured response with safe phrasing',
+      'Assistant offers next steps and escalation signals',
+      'Process logs feedback for ongoing improvement',
+      'Support can route to real human care when needed'
+    ],
+    features:[
+      'Medical knowledge retrieval with contextual guidance',
+      'User-friendly interaction for common health questions',
+      'Supportive assistant without replacing professional care',
+      'Safe, structured responses grounded in verified context',
+      'Escalation pathway for higher-risk scenarios',
+      'Scalable for clinics and digital health experiences'
+    ],
+    impact:[
+      'Improves access to health guidance',
+      'Helps reduce routine support load',
+      'Creates a faster first layer of care support'
+    ],
+    demo:'https://ai-doctor-virtual-medical-assistant.vercel.app/', github:'#',
+    images:[
+      U('1576091160558-3f80f3f5c427'),U('1584513777732-4d64e1f7a60a'),U('1559839734-2b71ea197ec2'),
+      U('1550831107-5b7a4b8c4e50'),U('1584513751117-5a0bc8024b55'),U('1516549657692-9b80b98f25e1')
+    ]
+  },
+  {
+    id:'well-being-agent',
+    title:'Well Being Agent',
+    category:'Wellness AI',
+    short:'A supportive wellness agent for everyday health, habits and personal balance.',
+    desc:'Well Being Agent helps users improve routines, check in on lifestyle habits and receive thoughtful wellness guidance in one place.',
+    long:'This agent focuses on the human side of health by providing encouraging wellness guidance, habit prompts and reflective check-ins. It is designed to support a healthier lifestyle in a calm, practical and approachable way.',
+    languages:['React','Python','JavaScript'],
+    tech:['OpenAI','FastAPI','RAG','Node.js','Vercel'],
+    tools:['Supabase','PostgreSQL','Docker','Auth0','Notion'],
+    workflow:[
+      'User sets wellness goals or emotional check-ins',
+      'Assistant tracks relevant habits and routines',
+      'AI generates practical, encouraging guidance',
+      'Suggestions are personalized to user context',
+      'Progress is reflected back in a supportive dashboard',
+      'Prompts encourage healthy, sustainable behaviour'
+    ],
+    features:[
+      'Daily wellness support and guidance',
+      'Personalised habit suggestions',
+      'Thoughtful prompts for reflection and balance',
+      'Simple, calming conversational experience',
+      'Encourages sustainable wellbeing routines',
+      'Accessible digital companion for self-care'
+    ],
+    impact:[
+      'Supports healthier daily habits',
+      'Creates a constant but low-pressure wellness checkpoint',
+      'Makes personal wellbeing more actionable'
+    ],
+    demo:'https://well-being-agent.vercel.app/', github:'#',
+    images:[
+      U('1517849840537-2aa8d8b3bf5d'),U('1541534403-775a86d3d4b4'),U('1506126613408-eca07ce68773'),
+      U('1515377905703-c4788e51af15'),U('1505751172878-7be7da7f9ad6'),U('1490645935967-10de6ba17061')
+    ]
+  },
+  {
+    id:'cricket-world-cup-rag',
+    title:'Cricket World Cup RAG',
+    category:'Sports AI',
+    short:'A retrieval-powered cricket assistant for world cup insights and fan queries.',
+    desc:'This RAG-based assistant helps users ask questions about cricket statistics, fixtures, and tournament context using rich knowledge retrieval.',
+    long:'Cricket World Cup RAG blends relevant sports knowledge and retrieval logic to answer fans’ questions with better context and clearer explanations. It is tailored for fast, useful tournament insight without the friction of manual searching.',
     languages:['Python','JavaScript','TypeScript'],
-    tech:['LangChain','Vector DB','OpenAI API','Node.js','React','WebSockets'],
-    tools:['Zendesk','Intercom','Notion','Pinecone','Docker'],
+    tech:['RAG','OpenAI','FastAPI','Vector DB','React'],
+    tools:['Vercel','Postgres','Supabase','Docker','Pinecone'],
     workflow:[
-      'Customer message arrives from chat, email or widget',
-      'Query is embedded and matched against the knowledge base',
-      'Relevant documents are retrieved and re-ranked',
-      'Response is generated with citations and tone control',
-      'Sentiment and confidence are scored in real time',
-      'Low-confidence threads escalate with an AI-written summary'
+      'Question is submitted by the user',
+      'Retriever searches cricket knowledge indexes',
+      'Relevant context is ranked and selected',
+      'AI composes a precise answer',
+      'Response is displayed with context awareness',
+      'Feedback can improve future retrieval accuracy'
     ],
     features:[
-      'Retrieval-augmented answers grounded in real docs',
-      'Multichannel: web widget, email and in-app',
-      'Live sentiment and confidence scoring',
-      'Automatic escalation with context handoff',
-      'Conversation analytics and gap detection',
-      'Admin console for knowledge curation'
+      'Tournament-aware cricket Q&A',
+      'Knowledge retrieval for facts and context',
+      'Fast answer generation for fans and analysts',
+      'Useful for event research and summarization',
+      'Structured experience with clear retrieval grounding',
+      'Expandable to match additional sports content'
     ],
     impact:[
-      '62% of tickets resolved without human touch',
-      'Customer satisfaction up 21 points',
-      'Knowledge gaps surfaced automatically each week'
+      'Speeds up cricket knowledge lookup',
+      'Improves answer quality with retrieval grounding',
+      'Turns fan questions into a guided, instant experience'
     ],
-    demo:'#', github:'#',
+    demo:'https://cricket-world-cup-rag-assistant.vercel.app/', github:'#',
     images:[
-      U('1587560699334-cc4ff634909a'),U('1611926653458-09294b3142bf'),U('1556157382-97eda2d62296'),
-      U('1573497019940-1c28c88b4f3e'),U('1600880292203-757bb62b4baf'),U('1552664730-d307ca884978'),
-      U('1521737604893-d14cc237f11d'),U('1521737711867-e3b97375f902'),U('1587620962725-abab7fe55159'),
-      U('1605379399642-870262d3d051')
+      U('1540746385808-a0403bba1e8a'),U('1521417531038-25d2d3d5f66e'),U('1517649763962-0c62c7d8b5c5'),
+      U('1541534403-775a86d3d4b4'),U('1522778117320-4d6d9e1b2f3d'),U('1518604665230-3eb6c8d7f4d4')
     ]
   },
   {
-    id:'whatsapp-business-automation',
-    title:'WhatsApp Business Automation',
-    category:'Messaging',
-    short:'Conversational commerce and notifications on WhatsApp.',
-    desc:'A WhatsApp Business API engine handling inquiries, order updates and automated replies with a conversational flow builder.',
-    long:'Built on the WhatsApp Business Cloud API, this system manages inbound conversations, guides customers through structured flows, and pushes transactional notifications such as order confirmations and delivery updates. A visual flow builder lets non-technical teams design new journeys without touching code.',
-    languages:['JavaScript','Node.js','Python'],
-    tech:['WhatsApp Cloud API','Express','MongoDB','Redis','Webhooks'],
-    tools:['Meta Business','Twilio','Shopify','Firebase','Docker'],
+    id:'email-automation',
+    title:'Email Automation',
+    category:'Workflow Automation',
+    short:'AI-powered email operations for sorting, replying and routing messages efficiently.',
+    desc:'This automation system handles inbound email workflows with smart routing, categorisation and AI-generated response support.',
+    long:'The Email Automation project uses AI and workflow logic to process incoming messages intelligently. It identifies priority, routes messages correctly and helps teams respond faster while keeping a clear human fallback path.',
+    languages:['Python','Node.js','JavaScript'],
+    tech:['OpenAI','IMAP','SMTP','Celery','Redis'],
+    tools:['Gmail API','Zapier','HubSpot','Slack','Docker'],
     workflow:[
-      'Customer sends a message to the business number',
-      'Webhook delivers the payload to the automation server',
-      'Intent is classified and matched to a journey',
-      'Flow engine sends interactive replies and buttons',
-      'Order or booking events trigger template notifications',
-      'Conversation state is persisted for continuity'
+      'New email arrives in the business inbox',
+      'Automation classifies subject, intent and priority',
+      'AI drafts or suggests the right response',
+      'System routes the message into the correct queue',
+      'Approval or auto-send happens based on rules',
+      'Response and action are logged for review'
     ],
     features:[
-      'Interactive buttons, lists and quick replies',
-      'Template message scheduling and approval',
-      'Order and delivery status notifications',
-      'Visual drag-and-drop flow builder',
-      'Agent takeover with full conversation history',
-      'Delivery and read receipts analytics'
+      'Inbox triage and smart classification',
+      'Context-aware response generation',
+      'Human approval before send',
+      'CRM and workflow routing',
+      'Actionable logs for team visibility',
+      'Improves speed without losing accuracy'
     ],
     impact:[
-      '3.4× faster customer response times',
-      'Abandoned cart recovery lifted by 18%',
-      'Support load reduced across peak hours'
+      'Cuts down repetitive inbox work',
+      'Speeds up customer and team communication',
+      'Keeps critical messages on the right track'
     ],
-    demo:'#', github:'#',
+    demo:'https://email-automation-sigma-navy.vercel.app/', github:'#',
     images:[
-      U('1611162617474-5b21e879e113'),U('1556742049-0cfed4f6a45d'),U('1512941937669-90a1b58e7e9c'),
-      U('1522199755839-a2bacb67c546'),U('1511707171634-5f897ff02aa9'),U('1512428559087-560fa5ceab42'),
-      U('1573164713988-8665fc963095'),U('1581091226825-a6a2a5aee158'),U('1610563166150-b34df4f3bcd6'),
-      U('1560472354-b33ff0c44a43')
+      U('1552664730-d307ca884978'),U('1556740756-efb1c2d759db'),U('1553413077-0d6d1c4e09c4'),
+      U('1497366754035-f200968a6e72'),U('1516321318423-f06f85e504b3'),U('1516321163659-7a7d1135e7b8')
     ]
   },
   {
-    id:'ecommerce-order-automation',
-    title:'E-Commerce Order Automation',
-    category:'Commerce Ops',
-    short:'Orders, tracking and notifications fully orchestrated.',
-    desc:'An order lifecycle automation layer that syncs storefront, warehouse and customer communication into one reliable pipeline.',
-    long:'This platform watches the storefront for new orders and drives every downstream step automatically: inventory reservation, warehouse dispatch, courier booking, tracking generation and customer notification. Exceptions such as failed payments or out-of-stock items are caught early and routed to the right team.',
-    languages:['JavaScript','TypeScript','Python'],
-    tech:['Node.js','Shopify API','Stripe','PostgreSQL','React','BullMQ'],
-    tools:['Shopify','WooCommerce','ShipStation','Stripe','Slack'],
+    id:'ai-software-house',
+    title:'AI Software House',
+    category:'AI Agency Platform',
+    short:'A multi-agent AI software house experience focused on digital product execution and automation.',
+    desc:'AI Software House presents an agency-style multi-agent platform built to automate product development, research and delivery workflows.',
+    long:'This project demonstrates how AI systems can power an entire software house workflow, from discovery and planning to execution and delivery. It captures the idea of specialized AI agents working in coordination for product and systems work.',
+    languages:['Next.js','Python','JavaScript'],
+    tech:['OpenAI','LangGraph','RAG','FastAPI','React'],
+    tools:['Vercel','Supabase','Postgres','Docker','Notion'],
     workflow:[
-      'Order placed on the storefront triggers a webhook',
-      'Payment status is verified and inventory reserved',
-      'Warehouse pick list is generated automatically',
-      'Courier API books the shipment and returns tracking',
-      'Customer receives tracking via email and WhatsApp',
-      'Exception handler routes failed or delayed orders'
+      'Operator defines a product objective or requirement',
+      'Agents break it into tasks and research streams',
+      'Implementation logic and assets are generated',
+      'Outputs are reviewed and refined by human oversight',
+      'Deployment-ready work is packaged for execution',
+      'Results feed back into future iterations'
     ],
     features:[
-      'Multi-storefront order unification',
-      'Automated inventory reconciliation',
-      'Courier and label generation',
-      'Customer notification sequencing',
-      'Refund and return workflow automation',
-      'Real-time operations dashboard'
+      'Multi-agent strategy and execution model',
+      'AI-assisted product workflows',
+      'Clear digital agency presentation and workflows',
+      'Human review layer for quality control',
+      'Designed for scalable digital production',
+      'Supports idea-to-output automation'
     ],
     impact:[
-      'Order processing time cut by 71%',
-      'Manual data entry errors near zero',
-      'Same-day dispatch rate up 34%'
+      'Shows how AI can power a digital agency workflow',
+      'Turns project execution into a coordinated system',
+      'Accelerates concept-to-delivery cycles'
     ],
-    demo:'#', github:'#',
+    demo:'https://multi-agent-ai-software-house.vercel.app/', github:'#',
     images:[
-      U('1563013544-824ae1b704d3'),U('1472851294608-062f824d29cc'),U('1526304640581-d334cdbbf45e'),
-      U('1554224155-6726b3ff858f'),U('1542744173-8e7e53415bb0'),U('1454165804606-c3d57bc86b40'),
-      U('1553877522-43269d4ea984'),U('1522071820081-009f0129c71c'),U('1497366754035-f200968a6e72'),
-      U('1524758631624-e2822e304c36')
+      U('1522202176988-66273c2fd55f'),U('1517245386807-bb43f82c33c4'),U('1516321318423-f06f85e504b3'),
+      U('1551434678-e076c223a692'),U('1521747119671-9d3f5b0f7974'),U('1531297484001-80022131f5a1')
     ]
   },
   {
-    id:'ai-lead-generation',
-    title:'AI Lead Generation Automation',
-    category:'Growth Engine',
-    short:'Capture, qualify and route leads without manual work.',
-    desc:'A lead intelligence pipeline that enriches incoming contacts, scores them with AI and pushes the best ones straight to sales.',
-    long:'Leads arrive from forms, ads, LinkedIn and inbound email. The system enriches each record with firmographic and behavioural data, applies an AI scoring model trained on historical wins, then routes hot leads to sales in real time while nurturing the rest automatically.',
-    languages:['Python','JavaScript','TypeScript'],
-    tech:['OpenAI API','Scikit-learn','Node.js','MongoDB','React','REST APIs'],
-    tools:['HubSpot','Salesforce','Clearbit','LinkedIn','Slack'],
+    id:'bazme-sukhan',
+    title:'Bazme Sukhan',
+    category:'Community Platform',
+    short:'A community-focused digital platform for knowledge sharing, connection and engagement.',
+    desc:'Bazme Sukhan is built around a warm, community-driven experience that supports interaction, storytelling and shared learning.',
+    long:'Bazme Sukhan blends community engagement and digital experience into a polished platform for connection and participation. It is designed to feel welcoming, informative and active for audiences that want meaningful interaction and shared knowledge.',
+    languages:['React','JavaScript','Python'],
+    tech:['Next.js','FastAPI','PostgreSQL','OpenAI','Vercel'],
+    tools:['Supabase','Auth0','Cloudinary','Stripe','Docker'],
     workflow:[
-      'Lead captured from form, ad or inbound channel',
-      'Record enriched with company and role data',
-      'AI scoring model predicts conversion likelihood',
-      'Leads are categorised into hot, warm and nurture',
-      'Hot leads pushed to sales with an instant alert',
-      'Nurture sequences triggered for the remainder'
+      'Members join the platform and create profiles',
+      'Community content and interactions are organized',
+      'AI can support recommendations and summaries',
+      'Engagement is surfaced through a welcoming interface',
+      'Members discover relevant conversations and content',
+      'Platform experience stays active and community-led'
     ],
     features:[
-      'Real-time enrichment on capture',
-      'Explainable AI lead scoring',
-      'Automatic de-duplication across sources',
-      'CRM sync with activity timeline',
-      'Personalised nurture sequence generation',
-      'Weekly pipeline quality reporting'
+      'Community-first digital experience',
+      'Member engagement and content discovery',
+      'Personalized interaction opportunities',
+      'AI-powered recommendations and summaries',
+      'Friendly, accessible user experience',
+      'Built for connection and social participation'
     ],
     impact:[
-      'Qualified lead volume up 44%',
-      'Sales follow-up time down to under 3 minutes',
-      'Wasted outreach reduced significantly'
+      'Supports better community engagement',
+      'Makes knowledge-sharing more discoverable',
+      'Creates a modern digital home for connection'
     ],
-    demo:'#', github:'#',
+    demo:'https://bazme-nazam.vercel.app/', github:'#',
     images:[
-      U('1551288049-bebda4e38f71'),U('1460925895917-afdab827c52f'),U('1543286386-713bdd548da4'),
-      U('1591453089816-0fbb971b454c'),U('1504868584819-f8e8b4b6d7e3'),U('1526628953301-3e589a6a8b74'),
-      U('1614064641938-3bbee52942c7'),U('1550751827-4bd374c3f58b'),U('1573165231977-3f0e27806045'),
-      U('1544197150-b99a580bb7a8')
+      U('1511632765486-a01980eac5ad'),U('1529156069898-9ea5fcb75a8f'),U('1529156140110-6dfd1a47d6e1'),
+      U('1522202176988-66273c2fd55f'),U('1497366754035-f200968a6e72'),U('1516321163659-7a7d1135e7b8')
     ]
   },
   {
-    id:'ai-social-media-automation',
-    title:'AI Social Media Automation',
-    category:'Content Ops',
-    short:'Content pipelines, captions and scheduling on autopilot.',
-    desc:'A content operations system that generates, organises and schedules social posts across multiple platforms with AI assistance.',
-    long:'The platform turns a content calendar into a fully automated publishing pipeline. AI drafts captions and hashtags from source material, media assets are auto-organised into campaigns, approvals happen in a shared board, and the scheduler publishes to every connected platform at optimal times.',
-    languages:['Python','JavaScript','HTML','CSS'],
-    tech:['OpenAI API','Node.js','React','MongoDB','Cloudinary','Cron'],
-    tools:['Meta Graph API','X API','LinkedIn API','Buffer','Figma'],
-    workflow:[
-      'Content brief or source material is ingested',
-      'AI generates captions, hooks and hashtags',
-      'Media assets are auto-tagged and organised',
-      'Draft enters an approval board for review',
-      'Scheduler queues posts at optimal time slots',
-      'Performance metrics feed back into the model'
-    ],
-    features:[
-      'Multi-platform publishing from one calendar',
-      'AI caption and hashtag generation',
-      'Automated media library organisation',
-      'Approval workflow with role permissions',
-      'Best-time-to-post recommendations',
-      'Engagement analytics dashboard'
-    ],
-    impact:[
-      'Content output increased 5×',
-      'Posting consistency at 100%',
-      'Engagement rate improved month over month'
-    ],
-    demo:'#', github:'#',
-    images:[
-      U('1563986768609-322da13575f3'),U('1531482615713-2afd69097998'),U('1499951360447-b19be8fe80f5'),
-      U('1517245386807-bb43f82c33c4'),U('1504384308090-c894fdcc538d'),U('1516321318423-f06f85e504b3'),
-      U('1517430816045-df4b7de11d1d'),U('1519389950473-47ba0277781c'),U('1551434678-e076c223a692'),
-      U('1522202176988-66273c2fd55f')
-    ]
-  },
-  {
-    id:'ai-document-processing',
-    title:'AI Document Processing Automation',
-    category:'Data Extraction',
-    short:'OCR, extraction and structured output from any document.',
-    desc:'A document intelligence pipeline that reads invoices, contracts and forms, then outputs clean structured data to your systems.',
-    long:'Uploaded documents pass through OCR, layout analysis and an AI extraction model that identifies fields, tables and clauses. Results are validated against business rules, flagged when uncertain, and pushed into the database or accounting system as structured records.',
-    languages:['Python','JavaScript'],
-    tech:['Tesseract','OpenAI Vision','FastAPI','React','PostgreSQL','S3'],
-    tools:['AWS S3','Google Drive','Dropbox','QuickBooks','Docker'],
-    workflow:[
-      'Document uploaded or pulled from a watched folder',
-      'OCR extracts raw text and layout coordinates',
-      'AI model identifies fields, tables and clauses',
-      'Extracted data validated against business rules',
-      'Uncertain fields flagged for human review',
-      'Structured record pushed to the destination system'
-    ],
-    features:[
-      'Multi-format support: PDF, scan, image, DOCX',
-      'Table and clause-level extraction',
-      'Confidence scoring per field',
-      'Human review queue for exceptions',
-      'Batch processing with parallel workers',
-      'Export to CSV, JSON and database'
-    ],
-    impact:[
-      'Manual data entry reduced by 85%',
-      'Processing time per document under 8 seconds',
-      'Extraction accuracy above 96% on invoices'
-    ],
-    demo:'#', github:'#',
-    images:[
-      U('1591696205602-2f950c417cb9'),U('1568667256549-094345857637'),U('1517842645767-c639042777db'),
-      U('1517048676732-d65bc937f952'),U('1543269865-cbf427effbad'),U('1497215728101-856f4ea42174'),
-      U('1497366811353-6870744d04b2'),U('1580894732444-8ecded7900cd'),U('1531973576160-7125cd663d86'),
-      U('1488190211105-8b0e65b80b4e')
-    ]
-  },
-  {
-    id:'ai-meeting-automation',
-    title:'AI Meeting Automation',
-    category:'Knowledge Ops',
-    short:'Transcription, summaries and action items extracted automatically.',
-    desc:'A meeting intelligence system that records, transcribes and converts conversations into decisions, tasks and follow-ups.',
-    long:'Every meeting is captured, transcribed with speaker separation, and analysed by an AI layer that produces a structured summary, a decision log and a list of assigned action items. Tasks are pushed into the project management tool and reminders are scheduled automatically.',
+    id:'customer-rag-assistant',
+    title:'Customer RAG Assistant',
+    category:'Support AI',
+    short:'A retrieval-augmented customer support assistant for quick, grounded answers.',
+    desc:'This assistant retrieves relevant knowledge and responds with context-aware support for customer inquiries and operational questions.',
+    long:'Customer RAG Assistant is purpose-built to answer support and customer questions with grounded, reference-based responses. It improves productivity by combining knowledge retrieval, response generation and contextual follow-through in one workflow.',
     languages:['Python','TypeScript','JavaScript'],
-    tech:['Whisper','OpenAI API','Node.js','React','WebRTC','PostgreSQL'],
-    tools:['Zoom','Google Meet','Notion','Asana','Slack'],
+    tech:['RAG','OpenAI','FastAPI','Vector DB','React'],
+    tools:['Supabase','Pinecone','Vercel','Postgres','Slack'],
     workflow:[
-      'Meeting joined or recording uploaded',
-      'Audio transcribed with speaker diarisation',
-      'AI extracts summary, decisions and action items',
-      'Tasks assigned to owners with due dates',
-      'Records synced into the project management tool',
-      'Follow-up reminders scheduled automatically'
+      'Customer question enters the assistant',
+      'Knowledge base is retrieved and ranked',
+      'AI composes a grounded response',
+      'Answer is shown with supporting context',
+      'Escalation rules can trigger human intervention',
+      'Support logs help improve retrieval quality'
     ],
     features:[
-      'Speaker-separated transcription',
-      'Structured summaries and decision logs',
-      'Automatic action item extraction and assignment',
-      'Searchable meeting knowledge base',
-      'Integration with task managers',
-      'Multilingual transcription support'
+      'Grounded customer support answers',
+      'Evidence-based retrieval for trust and clarity',
+      'Fast support experience for common questions',
+      'Scalable knowledge base integration',
+      'Supports human handoff for complex issues',
+      'Usable for support teams and customer portals'
     ],
     impact:[
-      'Meeting documentation time reduced by 90%',
-      'Action item follow-through up 47%',
-      'Searchable history across all calls'
+      'Improves support answer quality',
+      'Reduces repetitive manual lookup time',
+      'Creates a clearer support experience'
     ],
-    demo:'#', github:'#',
+    demo:'https://safe-x-knowledge-assistant.vercel.app/', github:'#',
     images:[
-      U('1524178232363-1fb2b075b655'),U('1556761175-b413da4baf72'),U('1515187029135-18ee286d815b'),
-      U('1509228468518-180dd4864904'),U('1484417894907-623942c8ee29'),U('1542626991-cbc4e32524cc'),
-      U('1550439062-609e1531270e'),U('1573164574572-cb89e39749b4'),U('1560179707-f14e90ef3623'),
-      U('1541746972996-4e0b0f43e02a')
+      U('1556740745-7634084d9f55'),U('1581091226825-a6a2a5aee158'),U('1516321318423-f06f85e504b3'),
+      U('1497366754035-f200968a6e72'),U('1543269865-cbf427effbad'),U('1522202176988-66273c2fd55f')
     ]
   },
   {
-    id:'business-workflow-automation',
-    title:'Business Workflow Automation Platform',
-    category:'Platform',
-    short:'A visual builder for multi-step business automation.',
-    desc:'A no-code workflow engine where teams design triggers, conditions and actions that connect every tool in the business.',
-    long:'The platform provides a visual canvas for building multi-step automations. Triggers listen to events across connected apps, conditional branches route logic, and actions execute API calls, notifications or database writes. Every run is logged with replay capability so failures can be diagnosed and retried instantly.',
-    languages:['Python','TypeScript','JavaScript'],
-    tech:['Node.js','React','PostgreSQL','Redis','REST & GraphQL','Docker'],
-    tools:['Stripe','Slack','Salesforce','Google Workspace','Webhooks'],
+    id:'zenthronix',
+    title:'Zenthronix',
+    category:'Technology Brand',
+    short:'A polished technology brand and digital presence built to showcase innovation and trust.',
+    desc:'Zenthronix is a technology-facing brand platform designed to present advanced digital capability with confidence and clarity.',
+    long:'Zenthronix captures the idea of a future-facing technology company through an elegant digital experience, clear positioning and modern visual execution. It is a strong example of a premium digital brand presence built for trust and credibility.',
+    languages:['JavaScript','HTML','CSS'],
+    tech:['React','Vercel','Web Design','Brand Systems','UI/UX'],
+    tools:['Figma','Adobe Suite','Webflow','Vercel','SEO'],
     workflow:[
-      'User designs a workflow on the visual canvas',
-      'Trigger listens for an event from a connected app',
-      'Conditional branches evaluate business rules',
-      'Actions execute API calls, messages or DB writes',
-      'Run is logged with full input and output payloads',
-      'Failed steps retry automatically with backoff'
+      'Brand strategy is translated into clear positioning',
+      'Design system and website structure are defined',
+      'Content and conversion flows are mapped',
+      'UI is built to feel premium and trustworthy',
+      'Launch is optimized for clarity and responsiveness',
+      'Continuous refinements improve discoverability'
     ],
     features:[
-      'Drag-and-drop workflow canvas',
-      '150+ prebuilt app connectors',
-      'Conditional branching and loops',
-      'Run history with replay and retry',
-      'Role-based access and audit trails',
-      'Self-hosted or cloud deployment'
+      'Premium technology-first brand presentation',
+      'Conversion-focused digital structure',
+      'Cohesive visual identity and interface',
+      'Responsive web experience for modern audiences',
+      'Strong trust-building presentation',
+      'Works as a digital flagship for a technology brand'
     ],
     impact:[
-      'Manual processes automated across 6 departments',
-      'Operational cost reduced by 38%',
-      'Average workflow runs in under 2 seconds'
+      'Builds trust and digital presence',
+      'Supports stronger brand perception',
+      'Creates a professional, scalable online platform'
     ],
-    demo:'#', github:'#',
+    demo:'https://zenthronix.com/', github:'#',
     images:[
-      U('1556740738-b6a63e27c4df'),U('1557804506-669a67965ba0'),U('1559136555-9303baea8ebd'),
-      U('1600880292089-90a7e086ee0c'),U('1573497491208-6b1acb260507'),U('1560264280-88b68371db39'),
-      U('1521791136064-7986c2920216'),U('1451187580459-43490279c0fa'),U('1518709268805-4e9042af9f23'),
-      U('1558494949-ef010cbdcc31')
-    ]
-  },
-  {
-    id:'ai-multi-agent-system',
-    title:'AI Multi-Agent Automation System',
-    category:'Agentic AI',
-    short:'Coordinated agents that research, analyse and execute together.',
-    desc:'A multi-agent orchestration layer where specialised AI agents collaborate on research, analysis and task execution.',
-    long:'Instead of one model doing everything, this system deploys specialised agents — a researcher, an analyst, a writer and an executor — coordinated by an orchestrator. Agents share a memory layer, hand off tasks, critique each other\'s output and deliver a verified result with a full reasoning trace.',
-    languages:['Python','TypeScript','JavaScript'],
-    tech:['LangGraph','OpenAI API','Vector DB','Node.js','React','Redis'],
-    tools:['Pinecone','RabbitMQ','Docker','Slack','Notion'],
-    workflow:[
-      'Orchestrator receives a high-level objective',
-      'Task is decomposed into agent-specific subtasks',
-      'Research agent gathers and validates sources',
-      'Analysis agent interprets data and forms conclusions',
-      'Writer agent produces the structured deliverable',
-      'Verifier agent critiques output before final delivery'
-    ],
-    features:[
-      'Specialised agents with defined roles',
-      'Shared memory and context layer',
-      'Inter-agent critique and verification loop',
-      'Full reasoning trace for every decision',
-      'Human approval gates for critical actions',
-      'Horizontal scaling with task queues'
-    ],
-    impact:[
-      'Complex research tasks completed in minutes',
-      'Output quality validated by peer-agent review',
-      'Reasoning fully auditable end to end'
-    ],
-    demo:'#', github:'#',
-    images:[
-      U('1620712943543-bcc4688e7485'),U('1677442136019-21780ecad995'),U('1655720828018-edd2daec9349'),
-      U('1635070041078-e363dbe005cb'),U('1535378917042-10a22c95931a'),U('1555255707-c07966088b7b'),
-      U('1531746790731-6c087fecd65a'),U('1593508512255-86ab42a8e620'),U('1552308995-2baac1ad5490'),
-      U('1589254065878-42c9da997008')
+      U('1522202176988-66273c2fd55f'),U('1516321318423-f06f85e504b3'),U('1497366754035-f200968a6e72'),
+      U('1551434678-e076c223a692'),U('1517245386807-bb43f82c33c4'),U('1531297484001-80022131f5a1')
     ]
   }
 ];
