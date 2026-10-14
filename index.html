@@ -575,6 +575,7 @@ h1,h2,h3,h4{font-family:'Sora','Trebuchet MS',sans-serif;font-weight:700;line-he
 .studio-photo img{
   width:100%;height:100%;
   object-fit:cover;
+  object-position:center top;
   transform:scale(1.02);
   filter:saturate(1.02) contrast(1.03);
   transition:transform 1s var(--ease), filter 1s var(--ease);
@@ -1584,15 +1585,9 @@ h1,h2,h3,h4{font-family:'Sora','Trebuchet MS',sans-serif;font-weight:700;line-he
       <div class="studio-tilt" data-tilt-studio>
         <div class="studio-frame">
           <div class="studio-photo">
-            <!-- ▼▼ REPLACE THIS WITH YOUR OWN STUDIO PHOTO ▼▼
-                 Drop your image into the project folder and point src to it, e.g.
-                 src="assets/studio-profile.jpg"
-                 src="studio.jpg"
-                 src="images/studio-photo.png"
-                 If the file is missing, an elegant placeholder appears automatically. -->
             <img id="studioPhoto"
-                 src="assets/studio-profile.jpg"
-                 alt="JBG Digital studio profile"
+                 src="profile.png.jpeg"
+                 alt="Jameel profile portrait"
                  loading="lazy" decoding="async">
             <span class="studio-light" aria-hidden="true"></span>
             <span class="studio-sheen" aria-hidden="true"></span>
