@@ -66,11 +66,36 @@ body{
     linear-gradient(165deg,var(--ocean-1) 0%, var(--ocean-2) 46%, var(--ocean-1) 100%);
   background-attachment:fixed;
   -webkit-font-smoothing:antialiased;
+  cursor:none;
 }
 img{max-width:100%;display:block}
-a{text-decoration:none;color:inherit}
-button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+a{text-decoration:none;color:inherit;cursor:none}
+button{font:inherit;color:inherit;border:0;background:none;cursor:none}
+input,textarea{cursor:none}
 ul{list-style:none}
+.custom-cursor{
+  position:fixed;
+  top:0;left:0;
+  width:18px;height:18px;
+  border-radius:50%;
+  border:1px solid rgba(159,232,245,.8);
+  background:rgba(53,216,196,.12);
+  box-shadow:0 0 20px rgba(53,216,196,.35), inset 0 0 12px rgba(255,255,255,.2);
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  z-index:99999;
+  transition:width .2s ease,height .2s ease,background .2s ease,border-color .2s ease,box-shadow .2s ease,opacity .2s ease;
+}
+.custom-cursor.active{
+  width:42px;height:42px;
+  background:rgba(242,193,78,.12);
+  border-color:rgba(242,193,78,.9);
+  box-shadow:0 0 25px rgba(242,193,78,.4), inset 0 0 14px rgba(255,255,255,.18);
+}
+@media (pointer: coarse), (hover: none){
+  body, a, button, input, textarea { cursor: auto; }
+  .custom-cursor{ display:none; }
+}
 h1,h2,h3,h4{font-family:'Sora','Trebuchet MS',sans-serif;font-weight:700;line-height:1.08;letter-spacing:-.03em}
 ::selection{background:rgba(242,193,78,.32);color:#fff}
 
@@ -160,7 +185,13 @@ h1,h2,h3,h4{font-family:'Sora','Trebuchet MS',sans-serif;font-weight:700;line-he
   animation:bootLogoIn 1.2s var(--ease) both, bootFloat 5s ease-in-out 1.2s infinite;
   transform-style:preserve-3d;
 }
-.boot-logo svg{width:96px;height:96px;filter:drop-shadow(0 6px 18px rgba(31,182,176,.5))}
+.boot-logo img{
+  display:block;
+  width:min(72vw, 420px);
+  max-width:100%;
+  height:auto;
+  filter:drop-shadow(0 12px 28px rgba(242,193,78,.42));
+}
 .boot-logo::after{
   content:"";position:absolute;inset:0;border-radius:36px;
   background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.35) 46%,transparent 62%);
@@ -227,7 +258,10 @@ h1,h2,h3,h4{font-family:'Sora','Trebuchet MS',sans-serif;font-weight:700;line-he
 }
 .site-header.shrink{padding-top:9px;padding-bottom:9px;background:rgba(2,27,43,.9)}
 .brand{display:flex;align-items:center;gap:12px}
-.brand svg{width:44px;height:44px;filter:drop-shadow(0 4px 14px rgba(31,182,176,.45))}
+.brand img{
+  width:170px;height:auto;display:block;
+  filter:drop-shadow(0 6px 18px rgba(242,193,78,.2));
+}
 .brand-txt{display:flex;flex-direction:column;line-height:1}
 .brand-txt b{
   font-family:'Sora',sans-serif;font-size:15px;font-weight:800;
@@ -857,7 +891,8 @@ h1,h2,h3,h4{font-family:'Sora','Trebuchet MS',sans-serif;font-weight:700;line-he
   margin-top:-205px;
   transform-style:preserve-3d;
   will-change:transform, opacity;
-  cursor:pointer;
+  cursor:none;
+  transition:transform .9s cubic-bezier(.22,.8,.24,1), opacity .45s ease, filter .45s ease;
 }
 .pcard-glass{
   position:relative;
@@ -1658,6 +1693,7 @@ h1,h2,h3,h4{font-family:'Sora','Trebuchet MS',sans-serif;font-weight:700;line-he
 </head>
 
 <body>
+<div class="custom-cursor" aria-hidden="true"></div>
 
 <!-- =====================================================
      SVG SPRITE — LOGO + ICON SET
@@ -1773,9 +1809,9 @@ h1,h2,h3,h4{font-family:'Sora','Trebuchet MS',sans-serif;font-weight:700;line-he
     <div class="boot-ring" aria-hidden="true"></div>
     <div class="boot-ring two" aria-hidden="true"></div>
     <div class="boot-logo">
-      <svg viewBox="0 0 120 120" aria-hidden="true"><use href="#jbLogo"/></svg>
+      <img src="jameel.logo.transparent.png" alt="JBG logo" />
     </div>
-    <div class="boot-brand">JBG Digital</div>
+    <div class="boot-brand">JBG</div>
     <div class="boot-sub">Automation Lab</div>
     <div class="boot-bar"><i></i></div>
     <div class="boot-status">Initializing automation core <b>•</b></div>
@@ -1787,11 +1823,7 @@ h1,h2,h3,h4{font-family:'Sora','Trebuchet MS',sans-serif;font-weight:700;line-he
 ====================================================== -->
 <header class="site-header" id="siteHeader">
   <a href="#home" class="brand" aria-label="JBG Digital home">
-    <svg viewBox="0 0 120 120" aria-hidden="true"><use href="#jbLogo"/></svg>
-    <span class="brand-txt">
-      <b>JBG DIGITAL</b>
-      <span>Automation Lab</span>
-    </span>
+    <img src="jameel.logo.transparent.png" alt="JBG logo" />
   </a>
 
   <nav class="nav" id="mainNav" aria-label="Primary">
@@ -2776,7 +2808,20 @@ function studioPlaceholder(){
 ========================================================= */
 const floorEl   = document.getElementById('floor');
 const ringEl    = document.getElementById('floorRing');
+const cursorEl  = document.querySelector('.custom-cursor');
 const cards     = [];
+
+if (window.matchMedia('(pointer: fine)').matches && cursorEl) {
+  document.addEventListener('pointermove', event => {
+    cursorEl.style.left = `${event.clientX}px`;
+    cursorEl.style.top = `${event.clientY}px`;
+  });
+
+  document.querySelectorAll('a, button, .pcard, .gitem, .btn, .floor-btn, .detail-close, .lb-btn').forEach(el => {
+    el.addEventListener('mouseenter', () => cursorEl.classList.add('active'));
+    el.addEventListener('mouseleave', () => cursorEl.classList.remove('active'));
+  });
+}
 
 let ringAngle  = 0;
 let ringTarget = 0;
