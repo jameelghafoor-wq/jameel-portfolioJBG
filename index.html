@@ -991,6 +991,292 @@ h1,h2,h3,h4{font-family:'Sora','Trebuchet MS',sans-serif;font-weight:700;line-he
 }
 
 /* =========================================================
+   11b. AI VIDEO SHOWCASE  —  3D MARQUEE
+========================================================= */
+.ai-videos{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  padding-left:clamp(18px,5vw,72px);
+  padding-right:clamp(18px,5vw,72px);
+  background:
+    radial-gradient(1100px 640px at 50% -12%, rgba(124,58,237,.38), transparent 62%),
+    radial-gradient(820px 560px at 10% 112%, rgba(159,232,245,.10), transparent 66%),
+    radial-gradient(700px 500px at 92% 8%, rgba(242,193,78,.10), transparent 62%),
+    linear-gradient(180deg,#05010f 0%, #0a0320 48%, #05010f 100%);
+  border-top:1px solid rgba(159,232,245,.12);
+  border-bottom:1px solid rgba(159,232,245,.12);
+}
+
+/* ambient background */
+.ai-videos-bg{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.av-orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.55}
+.av-orb.o1{
+  width:540px;height:540px;top:-190px;left:-110px;
+  background:radial-gradient(circle,rgba(124,58,237,.8),transparent 68%);
+  animation:avDrift 22s ease-in-out infinite alternate;
+}
+.av-orb.o2{
+  width:470px;height:470px;bottom:-170px;right:-90px;
+  background:radial-gradient(circle,rgba(242,193,78,.42),transparent 68%);
+  animation:avDrift 28s ease-in-out infinite alternate-reverse;
+}
+.av-orb.o3{
+  width:380px;height:380px;top:42%;left:52%;
+  background:radial-gradient(circle,rgba(53,216,196,.30),transparent 68%);
+  animation:avDrift 34s ease-in-out -8s infinite alternate;
+}
+@keyframes avDrift{to{transform:translate3d(70px,46px,0) scale(1.14)}}
+
+.av-grid{
+  position:absolute;inset:0;opacity:.14;
+  background-image:
+    linear-gradient(rgba(159,232,245,.4) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(159,232,245,.4) 1px, transparent 1px);
+  background-size:66px 66px;
+  -webkit-mask-image:radial-gradient(ellipse at 50% 42%, #000 0%, transparent 74%);
+  mask-image:radial-gradient(ellipse at 50% 42%, #000 0%, transparent 74%);
+}
+
+/* marquee shell — full bleed */
+.video-marquee{
+  position:relative;
+  margin-inline:calc(clamp(18px,5vw,72px) * -1);
+  display:grid;
+  gap:0;
+}
+
+.video-row{
+  position:relative;
+  overflow:hidden;
+  padding:30px 0;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 7%,#000 93%,transparent 100%);
+  mask-image:linear-gradient(90deg,transparent 0,#000 7%,#000 93%,transparent 100%);
+}
+
+.video-track{
+  display:flex;
+  width:max-content;
+  will-change:transform;
+  animation:av-marquee-left 66s linear infinite;
+}
+.video-row[data-dir="right"] .video-track{
+  animation-name:av-marquee-right;
+  animation-duration:80s;
+}
+.video-row:hover .video-track,
+.video-row:focus-within .video-track{
+  animation-play-state:paused;
+}
+
+@keyframes av-marquee-left{
+  from{transform:translate3d(0,0,0)}
+  to{transform:translate3d(-50%,0,0)}
+}
+@keyframes av-marquee-right{
+  from{transform:translate3d(-50%,0,0)}
+  to{transform:translate3d(0,0,0)}
+}
+
+.video-set{
+  display:flex;
+  gap:clamp(16px,2vw,24px);
+  padding-right:clamp(16px,2vw,24px);
+  perspective:1500px;
+}
+
+/* ---------- video card ---------- */
+.vcard{
+  --rx:0deg;
+  --ry:0deg;
+  position:relative;
+  flex:0 0 auto;
+  width:clamp(232px,25vw,340px);
+  border-radius:24px;
+  outline:none;
+  cursor:pointer;
+  transform-style:preserve-3d;
+  transform:perspective(1100px) translate3d(0,0,0) rotateX(var(--rx)) rotateY(var(--ry)) scale(1);
+  transition:transform .32s var(--ease), filter .5s var(--ease);
+  will-change:transform;
+}
+.vcard:hover,
+.vcard:focus-visible{
+  transform:perspective(1100px) translate3d(0,-14px,0) rotateX(var(--rx)) rotateY(var(--ry)) scale(1.055);
+  z-index:8;
+}
+.vcard:focus-visible{outline:2px solid var(--gold);outline-offset:6px}
+
+.vcard-media{
+  position:relative;
+  aspect-ratio:16/10;
+  border-radius:24px;
+  overflow:hidden;
+  border:1px solid rgba(159,232,245,.18);
+  background:
+    radial-gradient(circle at 30% 20%, rgba(124,58,237,.5), transparent 60%),
+    linear-gradient(155deg,#1a0b33,#05010f 72%);
+  box-shadow:
+    0 26px 60px rgba(0,0,0,.62),
+    inset 0 0 0 1px rgba(255,255,255,.03),
+    inset 0 1px 0 rgba(255,255,255,.16);
+  transition:border-color .5s var(--ease), box-shadow .5s var(--ease);
+}
+.vcard:hover .vcard-media,
+.vcard:focus-visible .vcard-media{
+  border-color:rgba(242,193,78,.55);
+  box-shadow:
+    0 44px 86px rgba(0,0,0,.68),
+    0 0 48px rgba(124,58,237,.5),
+    0 0 96px rgba(242,193,78,.16),
+    inset 0 1px 0 rgba(255,255,255,.32);
+}
+
+.vcard-video{
+  width:100%;height:100%;
+  display:block;
+  object-fit:cover;
+  transform:scale(1.02);
+  filter:saturate(.92) contrast(1.04) brightness(.84);
+  transition:transform 1s var(--ease), filter .6s var(--ease);
+  background:linear-gradient(155deg,#1a0b33,#05010f 72%);
+}
+.vcard:hover .vcard-video,
+.vcard:focus-visible .vcard-video{
+  transform:scale(1.08);
+  filter:saturate(1.08) contrast(1.05) brightness(1);
+}
+
+.vcard-veil{
+  position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,
+    rgba(5,1,15,.02) 22%,
+    rgba(5,1,15,.52) 60%,
+    rgba(5,1,15,.94) 100%);
+  transition:opacity .5s var(--ease);
+}
+.vcard-shine{
+  position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(115deg,transparent 36%,rgba(255,255,255,.26) 50%,transparent 64%);
+  transform:translateX(-130%);
+  opacity:0;
+}
+.vcard:hover .vcard-shine{opacity:1;animation:sheen 1s var(--ease)}
+
+.vcard-cat{
+  position:absolute;top:14px;left:14px;z-index:3;
+  padding:6px 12px;border-radius:99px;
+  font-size:9px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--cyan-soft);
+  background:rgba(5,1,15,.62);
+  border:1px solid rgba(159,232,245,.26);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  transition:color .45s var(--ease), border-color .45s var(--ease);
+}
+.vcard:hover .vcard-cat{
+  color:var(--gold);
+  border-color:rgba(242,193,78,.55);
+}
+
+.vcard-play{
+  position:absolute;top:50%;left:50%;z-index:3;
+  display:grid;place-items:center;
+  width:62px;height:62px;margin:-31px 0 0 -31px;
+  border-radius:50%;
+  color:#05010f;
+  background:linear-gradient(140deg,var(--gold),#ffe6a3 50%,var(--gold-deep));
+  box-shadow:0 18px 42px rgba(242,193,78,.45), inset 0 1px 0 rgba(255,255,255,.72);
+  opacity:0;
+  transform:scale(.55);
+  transition:opacity .45s var(--ease), transform .45s var(--ease);
+}
+.vcard-play svg{width:24px;height:24px;margin-left:3px}
+.vcard:hover .vcard-play,
+.vcard:focus-visible .vcard-play{opacity:1;transform:scale(1)}
+.vcard.is-playing .vcard-play{opacity:0;transform:scale(.6)}
+
+.vcard-meta{
+  position:absolute;left:16px;right:16px;bottom:14px;z-index:3;
+  pointer-events:none;
+}
+.vcard-meta h3{
+  font-size:16px;
+  color:var(--cream);
+  text-shadow:0 4px 18px rgba(0,0,0,.75);
+}
+.vcard-desc{
+  max-height:0;
+  margin-top:0;
+  overflow:hidden;
+  opacity:0;
+  font-size:11.6px;
+  line-height:1.5;
+  color:var(--ink-soft);
+  transition:max-height .5s var(--ease), opacity .4s var(--ease), margin .5s var(--ease);
+}
+.vcard:hover .vcard-desc,
+.vcard:focus-visible .vcard-desc{
+  max-height:76px;
+  margin-top:6px;
+  opacity:1;
+}
+.vcard-foot{
+  display:inline-flex;align-items:center;gap:8px;
+  margin-top:10px;
+  font-size:9.5px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);
+  opacity:0;
+  transform:translateY(6px);
+  transition:opacity .45s var(--ease), transform .45s var(--ease);
+}
+.vcard-foot i{font-style:normal;transition:transform .45s var(--ease)}
+.vcard:hover .vcard-foot,
+.vcard:focus-visible .vcard-foot{opacity:1;transform:none}
+.vcard:hover .vcard-foot i{transform:translateX(4px)}
+
+/* fallback when a video/poster fails to load */
+.vcard.video-error .vcard-media{
+  background:
+    repeating-linear-gradient(115deg, rgba(159,232,245,.05) 0 1px, transparent 1px 9px),
+    radial-gradient(circle at 32% 26%, rgba(124,58,237,.55), transparent 62%),
+    linear-gradient(155deg,#1a0b33,#05010f 72%);
+}
+
+.video-note{
+  margin-top:clamp(24px,3.2vw,40px);
+  text-align:center;
+  font-size:10.5px;
+  letter-spacing:.24em;
+  text-transform:uppercase;
+  color:var(--ink-faint);
+}
+
+/* ---------- responsive ---------- */
+@media (max-width:1080px){
+  .vcard{width:clamp(228px,34vw,300px)}
+}
+@media (max-width:860px){
+  .vcard{width:clamp(214px,52vw,280px)}
+  .video-row{padding:24px 0}
+  .vcard-play{width:54px;height:54px;margin:-27px 0 0 -27px}
+  .vcard-play svg{width:20px;height:20px}
+}
+@media (max-width:620px){
+  .vcard{width:min(74vw,266px)}
+  .video-row{padding:20px 0}
+  .video-track{animation-duration:48s}
+  .video-row[data-dir="right"] .video-track{animation-duration:58s}
+  .vcard-meta h3{font-size:14.5px}
+  .video-marquee{margin-inline:calc(clamp(18px,5vw,72px) * -1)}
+}
+@media (prefers-reduced-motion:reduce){
+  .video-track{animation:none !important}
+  .video-row{overflow-x:auto;scrollbar-width:none}
+  .video-row::-webkit-scrollbar{display:none}
+}
+
+/* =========================================================
    12. CONTACT
 ========================================================= */
 .contact-grid{
@@ -1513,6 +1799,7 @@ h1,h2,h3,h4{font-family:'Sora','Trebuchet MS',sans-serif;font-weight:700;line-he
     <a href="#about">About</a>
     <a href="#services">Services</a>
     <a href="#projects">Projects</a>
+    <a href="#ai-videos">Videos</a>
     <a href="#contact">Contact</a>
   </nav>
 
@@ -1699,6 +1986,35 @@ h1,h2,h3,h4{font-family:'Sora','Trebuchet MS',sans-serif;font-weight:700;line-he
 </section>
 
 <!-- =====================================================
+     AI VIDEO SHOWCASE — 3D MARQUEE
+====================================================== -->
+<section class="section ai-videos" id="ai-videos">
+  <div class="ai-videos-bg" aria-hidden="true">
+    <span class="av-orb o1"></span>
+    <span class="av-orb o2"></span>
+    <span class="av-orb o3"></span>
+    <span class="av-grid"></span>
+  </div>
+
+  <div class="section-head reveal">
+    <span class="eyebrow">AI Video Lab</span>
+    <h2>AI Videos — <em>Imagination In Motion</em></h2>
+    <p>Exploring the future of visual storytelling through artificial intelligence.</p>
+  </div>
+
+  <div class="video-marquee" id="videoMarquee">
+    <div class="video-row" data-dir="left">
+      <div class="video-track" id="videoTrackA"></div>
+    </div>
+    <div class="video-row" data-dir="right">
+      <div class="video-track" id="videoTrackB"></div>
+    </div>
+  </div>
+
+  <p class="video-note reveal">Hover a card to preview · Tap on mobile</p>
+</section>
+
+<!-- =====================================================
      CONTACT
 ====================================================== -->
 <section class="section" id="contact">
@@ -1760,6 +2076,7 @@ h1,h2,h3,h4{font-family:'Sora','Trebuchet MS',sans-serif;font-weight:700;line-he
       <a href="#about">About</a>
       <a href="#services">Services</a>
       <a href="#projects">Projects</a>
+      <a href="#ai-videos">Videos</a>
       <a href="#contact">Contact</a>
     </nav>
     <p class="footer-note">© 2026 JBG Digital — Intelligent Automation Lab. All rights reserved.</p>
@@ -2235,6 +2552,84 @@ const TECH = [
   'OpenAI API','LangChain','LangGraph','FastAPI','PostgreSQL','MongoDB','Redis',
   'Docker','REST API','GraphQL','Webhooks','Vector DB','Celery','BullMQ',
   'WhatsApp API','Shopify API','Stripe','AWS','OCR / Tesseract','WebSockets'
+];
+
+/* ---------------------------------------------------------
+   AI VIDEO SHOWCASE — replace src/poster with your own files
+   e.g. src: 'videos/my-ai-film.mp4'
+        poster: 'images/my-ai-film.jpg'
+--------------------------------------------------------- */
+const AI_VIDEOS = [
+  {
+    title:'Neon Genesis',
+    category:'AI Cinematic Videos',
+    desc:'A rain-soaked megacity rebuilt frame by frame with diffusion rendering.',
+    src:'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+    poster:'https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&w=900&q=70'
+  },
+  {
+    title:'The Last Signal',
+    category:'AI Storytelling',
+    desc:'A lone transmission from a dying star, scripted and shot entirely by AI.',
+    src:'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+    poster:'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=900&q=70'
+  },
+  {
+    title:'Obsidian One',
+    category:'AI Product Ads',
+    desc:'A 30-second luxury product film with AI-generated lighting and materials.',
+    src:'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+    poster:'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=70'
+  },
+  {
+    title:'Paper Worlds',
+    category:'AI Animation',
+    desc:'Hand-crafted paper physics, animated through a neural motion pipeline.',
+    src:'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+    poster:'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=900&q=70'
+  },
+  {
+    title:'Chromatic Storm',
+    category:'AI Visual Effects',
+    desc:'Volumetric light and particle simulations composited with AI mattes.',
+    src:'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+    poster:'https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?auto=format&fit=crop&w=900&q=70'
+  },
+  {
+    title:'Ghost Protocol',
+    category:'AI Cinematic Videos',
+    desc:'A noir chase sequence graded and stabilised by an AI post pipeline.',
+    src:'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+    poster:'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=900&q=70'
+  },
+  {
+    title:'Echoes of Us',
+    category:'AI Storytelling',
+    desc:'Memory fragments stitched into a nonlinear narrative by a language model.',
+    src:'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
+    poster:'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=900&q=70'
+  },
+  {
+    title:'Aurum Watch',
+    category:'AI Product Ads',
+    desc:'Macro hero shots generated with synthetic reflections and gold shading.',
+    src:'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
+    poster:'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=900&q=70'
+  },
+  {
+    title:'Liquid Bloom',
+    category:'AI Animation',
+    desc:'Organic growth patterns animated with diffusion-based interpolation.',
+    src:'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
+    poster:'https://images.unsplash.com/photo-1620121692029-d088224ddc74?auto=format&fit=crop&w=900&q=70'
+  },
+  {
+    title:'Hyperdrive',
+    category:'AI Visual Effects',
+    desc:'Warp-speed transitions and lens flares built from a generative VFX stack.',
+    src:'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4',
+    poster:'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=900&q=70'
+  }
 ];
 
 /* =========================================================
@@ -2713,6 +3108,147 @@ document.addEventListener('keydown', e => {
     if (e.key === 'Escape') closeProject();
   }
 });
+
+/* =========================================================
+   AI VIDEO SHOWCASE — build, marquee, hover preview
+========================================================= */
+(function videoShowcase(){
+  const trackA = document.getElementById('videoTrackA');
+  const trackB = document.getElementById('videoTrackB');
+  if (!trackA || !trackB) return;
+
+  /* split the catalogue across the two rows */
+  const rowA = AI_VIDEOS.filter((_, i) => i % 2 === 0);
+  const rowB = AI_VIDEOS.filter((_, i) => i % 2 === 1);
+
+  function makeCard(v){
+    const el = document.createElement('article');
+    el.className = 'vcard';
+    el.tabIndex = 0;
+    el.setAttribute('role', 'figure');
+    el.setAttribute('aria-label', `${v.title} — ${v.category}. Hover or focus to preview.`);
+    el.innerHTML = `
+      <div class="vcard-media">
+        <video class="vcard-video" muted loop playsinline preload="none"
+               poster="${v.poster}" data-src="${v.src}"
+               aria-hidden="true" tabindex="-1"></video>
+        <span class="vcard-veil" aria-hidden="true"></span>
+        <span class="vcard-shine" aria-hidden="true"></span>
+        <span class="vcard-cat">${v.category}</span>
+        <span class="vcard-play" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8.2 4.9v14.2L19.4 12z"/></svg>
+        </span>
+        <div class="vcard-meta">
+          <h3>${v.title}</h3>
+          <p class="vcard-desc">${v.desc}</p>
+          <span class="vcard-foot">Watch<i>→</i></span>
+        </div>
+      </div>
+    `;
+    return el;
+  }
+
+  function wire(card, isDuplicate){
+    const vid = card.querySelector('video');
+    let loaded = false;
+
+    if (isDuplicate){
+      card.tabIndex = -1;
+      card.setAttribute('aria-hidden', 'true');
+    }
+
+    const play = () => {
+      if (!vid) return;
+      if (!loaded){
+        vid.src = vid.dataset.src;
+        loaded = true;
+        vid.addEventListener('error', () => card.classList.add('video-error'), {once:true});
+      }
+      const pr = vid.play();
+      if (pr && typeof pr.catch === 'function') pr.catch(() => {});
+      card.classList.add('is-playing');
+    };
+
+    const stop = () => {
+      if (vid && !vid.paused) vid.pause();
+      card.classList.remove('is-playing');
+    };
+
+    /* hover preview (mouse / pen) */
+    card.addEventListener('pointerenter', e => {
+      if (e.pointerType === 'touch') return;
+      play();
+    });
+    card.addEventListener('pointerleave', e => {
+      if (e.pointerType === 'touch') return;
+      stop();
+      card.style.setProperty('--rx', '0deg');
+      card.style.setProperty('--ry', '0deg');
+    });
+
+    /* keyboard */
+    card.addEventListener('focus', play);
+    card.addEventListener('blur', stop);
+
+    /* tap-to-toggle on touch devices */
+    card.addEventListener('click', () => {
+      if (!window.matchMedia('(hover: none)').matches) return;
+      if (vid.paused) play(); else stop();
+    });
+
+    /* subtle 3D tilt following the pointer */
+    if (!isDuplicate){
+      card.addEventListener('pointermove', e => {
+        if (e.pointerType === 'touch') return;
+        const b = card.getBoundingClientRect();
+        const x = (e.clientX - b.left) / b.width - 0.5;
+        const y = (e.clientY - b.top) / b.height - 0.5;
+        card.style.setProperty('--ry', (x * 13).toFixed(2) + 'deg');
+        card.style.setProperty('--rx', (-y * 11).toFixed(2) + 'deg');
+      });
+    }
+  }
+
+  function fill(track, list){
+    track.innerHTML = '';
+
+    for (let copy = 0; copy < 2; copy++){
+      const set = document.createElement('div');
+      set.className = 'video-set';
+      if (copy === 1) set.setAttribute('aria-hidden', 'true');
+
+      list.forEach(v => {
+        const card = makeCard(v);
+        wire(card, copy === 1);
+        set.appendChild(card);
+      });
+
+      track.appendChild(set);
+    }
+  }
+
+  fill(trackA, rowA);
+  fill(trackB, rowB);
+
+  /* pause every preview when the tab is hidden */
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) return;
+    document.querySelectorAll('.vcard-video').forEach(v => v.pause());
+    document.querySelectorAll('.vcard.is-playing').forEach(c => c.classList.remove('is-playing'));
+  });
+
+  /* stop previews that scroll far out of view */
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) return;
+      const vid = entry.target.querySelector('video');
+      if (vid && !vid.paused) vid.pause();
+      entry.target.classList.remove('is-playing');
+    });
+  }, { rootMargin: '200px 0px' });
+
+  document.querySelectorAll('.vcard').forEach(c => io.observe(c));
+})();
 
 /* =========================================================
    CONTACT FORM
